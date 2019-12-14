@@ -1,6 +1,6 @@
 # 使用方法 
 
-##1、添加依赖库 
+## 1、添加依赖库 
 
 在app build.gradle文件中android下添加：
 
@@ -16,7 +16,7 @@
     
     implementation 'com.github.xiaohaozi9825:RecyclerAdapterDatabinding:V1.1'
 
-##2、简单使用
+## 2、简单使用
 
     
     /**
@@ -40,11 +40,11 @@ SimpleAdapter类中已经封装好了item点击事件，可以直接使用：
             
         });
 
-##3、自定义
+## 3、自定义
 
 如果SimpleAdapter不能满足您的需求，可以自定义adapter实现更多功能：
 
-###1、创建一个类，并继承ViewHolder<VDB>
+### 1、创建一个类，并继承ViewHolder<VDB>
     
     public class GoodsHolder extends ViewHolder<ItemGoodsBinding> {
         public GoodsHolder(@NonNull ItemGoodsBinding binding) {
@@ -53,7 +53,7 @@ SimpleAdapter类中已经封装好了item点击事件，可以直接使用：
     }
 如果该中没有需要修改的地方，可以不定义，直接使用 父类ViewHolder<VDB>也是可以的。
 
-###2、创建一个类，并继承BaseAdapter
+### 2、创建一个类，并继承BaseAdapter
     
     /**
      * ItemGoodsBinding 对应的layout/item_goods.xml文件
