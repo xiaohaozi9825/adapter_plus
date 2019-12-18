@@ -76,3 +76,18 @@ SimpleAdapter类中已经封装好了item点击事件，可以直接使用：
             return R.layout.item_goods;
         }
     }
+
+
+# 现已升级到1.3 #
+## 1、依赖库 ##
+    
+	implementation 'com.github.xiaohaozi9825:RecyclerAdapterDatabinding:v1.3'
+
+## 2、增加如下内容 ##
+
+
+1. 增加SingleTypeAdapter类，使用泛型创建出ViewHolder（适用于只有一种viewType）；
+2. SimpleAdapter父类由原来的BaseAdapter换成了SingleTypeAdapter；
+3. 增加MultiTypeAdapter类，适用于多种viewType；
+4. 增加长按事件监听；
+5. 增加SelectAdapter类，适用于item选中（可单选可多选），该类继承SingleTypeAdapter，因此只能是一种viewType。
