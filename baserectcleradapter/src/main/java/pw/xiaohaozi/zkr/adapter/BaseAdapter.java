@@ -5,28 +5,41 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableList;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
-import pw.xiaohaozi.zkr.adapter.listener.OnClickListener;
-import pw.xiaohaozi.zkr.adapter.listener.OnItemClickListener;
-import pw.xiaohaozi.zkr.view_holder.ViewHolder;
+import pw.xiaohaozi.zkr.listener.OnClickListener;
+import pw.xiaohaozi.zkr.listener.OnItemClickListener;
+import pw.xiaohaozi.zkr.holder.ViewHolder;
+import pw.xiaohaozi.zkr.listener.OnItemLongClickListener;
+import pw.xiaohaozi.zkr.listener.OnLongClickListener;
 
+/**
+ * 该类对RecyclerView.Adapter做了进一步封装，时使其使用更加简单方便
+ *
+ * @param <VDB>
+ * @param <D>
+ * @param <VH>
+ */
 public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends ViewHolder<VDB>> extends RecyclerView.Adapter {
     private ObservableList<D> mDataList;
     protected Context mContext;
     private OnItemClickListener mOnItemClickListener;
     private OnClickListener mOnClickListener;
+    private OnItemLongClickListener mOnItemLongClickListener;
+    private OnLongClickListener mOnLongClickListener;
 
     /**
      * 追加数据，可用于上拉加载更多
+     * <p>
+     * 弃用原因：如果数据 D 继承了BaseObservable,则可以实时更新数据了，无需调用该方法
      *
      * @param list
      */
+    @Deprecated
     public void add(ObservableArrayList<D> list) {
         if (mDataList == null) {
             refresh(list);
@@ -37,9 +50,12 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
 
     /**
      * 增加一个数据
+     * <p>
+     * 弃用原因：如果数据 D 继承了BaseObservable,则可以实时更新数据了，无需调用该方法
      *
      * @param data
      */
+    @Deprecated
     public void add(D data) {
         if (mDataList == null) {
             mDataList = new ObservableArrayList<>();
@@ -49,16 +65,18 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
             if (!mDataList.contains(data)) {
                 mDataList.add(data);
             }
-
         }
     }
 
     /**
      * 增加一条数据到指定位置
+     * <p>
+     * 弃用原因：如果数据 D 继承了BaseObservable,则可以实时更新数据了，无需调用该方法
      *
      * @param position
      * @param data
      */
+    @Deprecated
     public void add(int position, D data) {
         if (mDataList == null) {
             mDataList = new ObservableArrayList<>();
@@ -71,9 +89,12 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
 
     /**
      * 移除指定位置数据
+     * <p>
+     * 弃用原因：如果数据 D 继承了BaseObservable,则可以实时更新数据了，无需调用该方法
      *
      * @param position
      */
+    @Deprecated
     public void remove(int position) {
         if (mDataList == null) return;
         mDataList.remove(position);
@@ -81,9 +102,12 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
 
     /**
      * 移除指定数据
+     * <p>
+     * 弃用原因：如果数据 D 继承了BaseObservable,则可以实时更新数据了，无需调用该方法
      *
      * @param data
      */
+    @Deprecated
     public void remove(D data) {
         if (mDataList == null) return;
         mDataList.remove(data);
@@ -91,7 +115,10 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
 
     /**
      * 移除所有数据
+     * <p>
+     * 弃用原因：如果数据 D 继承了BaseObservable,则可以实时更新数据了，无需调用该方法
      */
+    @Deprecated
     public void remove() {
         if (mDataList == null) return;
         mDataList.clear();
@@ -129,6 +156,14 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         mOnClickListener = listener;
     }
 
+    public void setOnItemLongClickListener(OnItemLongClickListener<VDB> onItemLongClickListener) {
+        mOnItemLongClickListener = onItemLongClickListener;
+    }
+
+    public void setOnLongClickListener(OnLongClickListener<VDB> onLongClickListener) {
+        mOnLongClickListener = onLongClickListener;
+    }
+
     public ObservableList<D> getDataList() {
         return mDataList;
     }
@@ -144,6 +179,8 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         VH vh = onCreateViewHolder(binding, viewType);
         if (mOnItemClickListener != null) vh.setOnItemClickListener(mOnItemClickListener);
         if (mOnClickListener != null) vh.setOnClickListener(mOnClickListener);
+        if (mOnItemLongClickListener != null) vh.setOnItemLongClickListener(mOnItemLongClickListener);
+        if (mOnLongClickListener != null) vh.setOnClickListener(mOnClickListener);
         return vh;
     }
 

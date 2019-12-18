@@ -8,7 +8,7 @@ import androidx.databinding.library.baseAdapters.BR;
  * 好友信息
  */
 public class FriendInfo extends BaseObservable {
-    private String name;
+    private String name = "没有";
     private String headPortrait;
     private String ana;
 
