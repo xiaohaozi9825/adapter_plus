@@ -4,18 +4,21 @@ import java.util.LinkedList;
 
 import androidx.databinding.ObservableList;
 import androidx.databinding.ViewDataBinding;
-import pw.xiaohaozi.zkr.holder.ViewHolder;
-import pw.xiaohaozi.zkr.listener.OnItemClickListener;
+import pw.xiaohaozi.zkr.holder.SelectHolder;
 
-public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends ViewHolder<VDB>> extends SingleTypeAdapter<VDB, D, VH> {
+
+public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends SelectHolder<VDB>> extends SingleTypeAdapter<VDB, D, VH> {
     private LinkedList<Integer> mSelectPosition = new LinkedList<>();
-    private int mMaxSelectSize = 1;//最多可以选中几个
+    private int mMaxSelectSize = Integer.MAX_VALUE;//最多可以选中几个
     private boolean isAutoRemove = true;//当超出选中个数后是否自动删除最先选中的
     private boolean isNoCancel = false;//是否禁止取消,当再次点击被选中的目标是，不执行任何操作
     private Warning mAutoRemoveWarning;
 
     /**
      * 最多可以选择多少项
+     * <p>
+     * 默认Integer.MAX_VALUE
+     * 如果想单选，则传入 1
      *
      * @param maxSelectSize
      * @return
@@ -72,6 +75,31 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends V
     }
 
     /**
+     * 全选
+     *
+     * @return
+     */
+    public SelectAdapter selectAll() {
+        mSelectPosition.clear();
+        for (int i = 0; i < getDataList().size(); i++) {
+            mSelectPosition.add(i);
+        }
+        notifyDataSetChanged();
+        return this;
+    }
+
+    /**
+     * 全不选
+     *
+     * @return
+     */
+    public SelectAdapter cancelAll() {
+        mSelectPosition.clear();
+        notifyDataSetChanged();
+        return this;
+    }
+
+    /**
      * 是否允许取消已选状态
      * <p>
      * 当点击一个已选中的item时，是否可以将该item状态设为未选状态
@@ -84,6 +112,14 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends V
         return this;
     }
 
+    /**
+     * 获取被选中的item索引
+     *
+     * @return
+     */
+    public LinkedList<Integer> getSelectPosition() {
+        return mSelectPosition;
+    }
 
     @Override
     public void refresh(ObservableList<D> list) {
@@ -91,29 +127,16 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends V
         super.refresh(list);
     }
 
-    /**
-     * 该方法已在内部调用，这里调用无效
-     *
-     * @param listener
-     */
-    @Override
-    @Deprecated
-    public void setOnItemClickListener(OnItemClickListener<VDB> listener) {
-        //抛异常太粗暴了，用    @Deprecated修饰下吧，显得温柔点
-//        throw new IllegalArgumentException("该类中不能调用该方法");
-    }
-
     @Override
     protected VH onCreateViewHolder(VDB binding, int viewType) {
         final VH vh = super.onCreateViewHolder(binding, viewType);
-        vh.setOnItemClickListener(vdb -> {
-            Integer selectPosition = vh.getLayoutPosition();
+        vh.setOnSelectChangeListener((selectHolder, position) -> {
             //先判断该item是否已经被选中了，如果是，则取消选择
-            if (mSelectPosition.contains(selectPosition)) {
+            if (mSelectPosition.contains(position)) {
                 if (isNoCancel) return;//如果禁止取消，则不执行任何操作
-                mSelectPosition.remove(selectPosition);
-                notifyItemChanged(selectPosition);
-                onSelectChange(selectPosition, false);
+                mSelectPosition.remove(position);
+                notifyItemChanged(position);
+                onSelectChange(position, false);
                 return;
             }
             if (mMaxSelectSize <= mSelectPosition.size()) {
@@ -127,10 +150,35 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends V
                     return;
                 }
             }
-            mSelectPosition.add(selectPosition);
-            notifyItemChanged(selectPosition);
-            onSelectChange(selectPosition, true);
+            mSelectPosition.add(position);
+            notifyItemChanged(position);
+            onSelectChange(position, true);
         });
+//        vh.setOnItemClickListener(vdb -> {
+//            Integer selectPosition = vh.getLayoutPosition();
+//            //先判断该item是否已经被选中了，如果是，则取消选择
+//            if (mSelectPosition.contains(selectPosition)) {
+//                if (isNoCancel) return;//如果禁止取消，则不执行任何操作
+//                mSelectPosition.remove(selectPosition);
+//                notifyItemChanged(selectPosition);
+//                onSelectChange(selectPosition, false);
+//                return;
+//            }
+//            if (mMaxSelectSize <= mSelectPosition.size()) {
+//                if (isAutoRemove) {
+//                    Integer first = mSelectPosition.removeFirst();
+//                    notifyItemChanged(first);
+//                    onSelectChange(first, false);
+//                } else {
+//                    if (mAutoRemoveWarning != null)
+//                        mAutoRemoveWarning.warn("您最多只能选中" + mMaxSelectSize + "条");
+//                    return;
+//                }
+//            }
+//            mSelectPosition.add(selectPosition);
+//            notifyItemChanged(selectPosition);
+//            onSelectChange(selectPosition, true);
+//        });
         return vh;
     }
 

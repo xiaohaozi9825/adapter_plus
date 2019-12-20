@@ -38,12 +38,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:text="@{friendInfo.ana ,default =我对钱没兴趣 }"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toRightOf="@id/iv_head_portrait" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

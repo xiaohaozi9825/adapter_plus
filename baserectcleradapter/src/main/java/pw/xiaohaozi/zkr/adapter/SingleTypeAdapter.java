@@ -39,44 +39,32 @@ public abstract class SingleTypeAdapter<VDB extends ViewDataBinding, D, VH exten
 
     @Override
     protected VH onCreateViewHolder(VDB binding, int viewType) {
-        Type[] types = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments();
-        Class<VH> VH_Class = null;
-        Class<VDB> VDB_Class = (Class<VDB>) types[0];
-        Type type2 = types[2];
-        if (types.length >= 3 && type2 instanceof Class) {
-            VH_Class = (Class<VH>) type2;
-        } else {
-            try {
-                String class_name = type2.toString().substring(0, type2.toString().lastIndexOf("<"));
-                Constructor<?> constructor = Class.forName(class_name).getDeclaredConstructor(ViewDataBinding.class);
-                return (VH) constructor.newInstance(binding);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            // return (VH) new ViewHolder(binding);
-        }
+        // FIXME: 2019/12/18 0018 这里使用泛型实例化ViewHolder，目前测试ok，不保证以后不会出现问题
         try {
-
-            Constructor<VH> constructor = VH_Class.getConstructor(VDB_Class);
-            return constructor.newInstance(binding);
-        } catch (IllegalAccessException e) {
+            Type[] types = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments();
+            Class<VDB> VDB_Class = (Class<VDB>) types[0];
+            Type type2 = types[2];
+            Constructor<?> constructor;
+            if (types.length >= 3 && type2 instanceof Class) {
+                Class VH_Class = (Class) type2;
+                constructor = VH_Class.getConstructor(VDB_Class);
+            } else {
+                String class_name = type2.toString().substring(0, type2.toString().lastIndexOf("<"));
+                constructor = Class.forName(class_name).getDeclaredConstructor(ViewDataBinding.class);
+            }
+            return (VH) constructor.newInstance(binding);
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
             e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
         } catch (InvocationTargetException e) {
             e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
-        throw new RuntimeException("泛型指定错误");
+        throw new RuntimeException("泛型指定错误,ViewHolder实例化失败");
     }
 
     private int getLayoutResource() {

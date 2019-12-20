@@ -142,8 +142,9 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      *
      * @param listener
      */
-    public void setOnItemClickListener(OnItemClickListener<VDB> listener) {
+    public <A extends BaseAdapter> A setOnItemClickListener(OnItemClickListener<VDB> listener) {
         mOnItemClickListener = listener;
+        return (A) this;
     }
 
     /**
@@ -152,16 +153,19 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      *
      * @param listener
      */
-    public void setOnClickListener(OnClickListener<VDB> listener) {
+    public <A extends BaseAdapter> A setOnClickListener(OnClickListener<VDB> listener) {
         mOnClickListener = listener;
+        return (A) this;
     }
 
-    public void setOnItemLongClickListener(OnItemLongClickListener<VDB> onItemLongClickListener) {
+    public <A extends BaseAdapter> A setOnItemLongClickListener(OnItemLongClickListener<VDB> onItemLongClickListener) {
         mOnItemLongClickListener = onItemLongClickListener;
+        return (A) this;
     }
 
-    public void setOnLongClickListener(OnLongClickListener<VDB> onLongClickListener) {
+    public <A extends BaseAdapter> A setOnLongClickListener(OnLongClickListener<VDB> onLongClickListener) {
         mOnLongClickListener = onLongClickListener;
+        return (A) this;
     }
 
     public ObservableList<D> getDataList() {
@@ -179,8 +183,9 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         VH vh = onCreateViewHolder(binding, viewType);
         if (mOnItemClickListener != null) vh.setOnItemClickListener(mOnItemClickListener);
         if (mOnClickListener != null) vh.setOnClickListener(mOnClickListener);
-        if (mOnItemLongClickListener != null) vh.setOnItemLongClickListener(mOnItemLongClickListener);
-        if (mOnLongClickListener != null) vh.setOnClickListener(mOnClickListener);
+        if (mOnItemLongClickListener != null)
+            vh.setOnItemLongClickListener(mOnItemLongClickListener);
+        if (mOnLongClickListener != null) vh.setOnLongClickListener(mOnLongClickListener);
         return vh;
     }
 
@@ -252,7 +257,6 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         public void onItemRangeRemoved(ObservableList<T> sender, int positionStart, int itemCount) {
             adapter.notifyItemRangeRemoved(positionStart, itemCount);
         }
-
     }
 
 }

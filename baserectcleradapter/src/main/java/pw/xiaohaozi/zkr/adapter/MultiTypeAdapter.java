@@ -4,14 +4,12 @@ import androidx.databinding.ViewDataBinding;
 import pw.xiaohaozi.zkr.holder.ViewHolder;
 
 /**
- * viewType 多类型
- * <p>
- * 当viewType为多类型itemView时，javaBean 类必须实现RecyclerData接口
- * 该类与父类BaseAdapter 唯一的不同是  D extends RecyclerData
- *
- * @param <D>
+ * 多类型viewType
+ * 1、传入的Javabean必须实现RecyclerData接口
  */
-public abstract class MultiTypeAdapter<D extends RecyclerData> extends BaseAdapter<ViewDataBinding, D, ViewHolder<ViewDataBinding>> {
-
-
+public abstract class MultiTypeAdapter extends BaseAdapter<ViewDataBinding, RecyclerData, ViewHolder<ViewDataBinding>> {
+    @Override
+    protected ViewHolder<ViewDataBinding> onCreateViewHolder(ViewDataBinding binding, int viewType) {
+        return new ViewHolder<>(binding);
+    }
 }
