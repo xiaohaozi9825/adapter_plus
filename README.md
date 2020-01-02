@@ -1,4 +1,4 @@
-# RecyclerView与DataBinding封装 #
+# RecyclerView中adapter与DataBinding封装 #
 > 博客地址：https://www.jianshu.com/u/2a2ea7b43087
 ## 1、添加依赖库 ##
 
