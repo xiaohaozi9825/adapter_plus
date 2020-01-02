@@ -1,6 +1,8 @@
 # RecyclerView与DataBinding封装 #
 > 博客地址：https://www.jianshu.com/u/2a2ea7b43087
 ## 1、添加依赖库 ##
+
+
 在app build.gradle文件中android下添加：
 
         
@@ -14,7 +16,7 @@
     }
 在dependencies 中添加依赖：
     
-    implementation 'com.github.xiaohaozi9825:adapter_plus:1.4'
+    implementation 'com.github.xiaohaozi9825:adapter_plus:1.5'
 ## 2、各功能模块使用及效果图 ##
 ### 1、最最简单的使用（item viewType只有1中） ###
 创建一个适配器，并继承SimpleAdapter类，只需要实现onBindViewHolder()方法即可，简单粗暴大气；我们可以在onBindViewHolder()方法中绑定数据到View。
