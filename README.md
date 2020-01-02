@@ -1,7 +1,7 @@
 # RecyclerView中adapter与DataBinding封装 #
 > 博客地址：https://www.jianshu.com/u/2a2ea7b43087
 ## 1、添加依赖库 ##
-[！[]（https://jitpack.io/v/xiaohaozi9825/adapter_plus.svg）]（https://jitpack.io/#xiaohaozi9825/adapter_plus）
+[ ![]（https://jitpack.io/v/xiaohaozi9825/adapter_plus.svg）]（https://jitpack.io/#xiaohaozi9825/adapter_plus）
 
 
 在app build.gradle文件中android下添加：
