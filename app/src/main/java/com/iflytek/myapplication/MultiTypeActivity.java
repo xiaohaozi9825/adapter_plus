@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.ObservableArrayList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import pw.xiaohaozi.zkr.adapter.RecyclerData;
+import pw.xiaohaozi.adapter_plus.adapter.RecyclerData;
 
 import android.os.Bundle;
 

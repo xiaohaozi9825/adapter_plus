@@ -4,10 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.ObservableArrayList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import pw.xiaohaozi.zkr.adapter.BaseAdapter;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import com.iflytek.myapplication.adapter.FriendAdapter;

@@ -1,2 +1,2 @@
-include ':app', ':baserectcleradapter'
+include ':app', ':adapterplus'
 rootProject.name='My Application'

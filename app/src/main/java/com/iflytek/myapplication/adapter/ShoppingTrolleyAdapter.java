@@ -8,8 +8,10 @@ import com.iflytek.myapplication.databinding.ItemBottomBinding;
 import com.iflytek.myapplication.databinding.ItemCentreBinding;
 import com.iflytek.myapplication.databinding.ItemTopBinding;
 
-import pw.xiaohaozi.zkr.adapter.MultiTypeAdapter;
-import pw.xiaohaozi.zkr.holder.ViewHolder;
+import androidx.databinding.ViewDataBinding;
+import pw.xiaohaozi.adapter_plus.adapter.MultiTypeAdapter;
+import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
+
 
 /**
  * 多类型viewType
@@ -41,7 +43,7 @@ public class ShoppingTrolleyAdapter extends MultiTypeAdapter {
      * @param viewHolder
      */
     @Override
-    protected void onBindViewHolder(int position, ViewHolder viewHolder) {
+    protected void onBindViewHolder(int position,  ViewHolder<ViewDataBinding> viewHolder) {
         switch (getItemViewType(position)) {
             case 0:
                 ((ItemTopBinding) viewHolder.getBinding()).setGoodsTop((GoodsTopInfo) getDataList().get(position));
@@ -62,6 +64,7 @@ public class ShoppingTrolleyAdapter extends MultiTypeAdapter {
                 break;
         }
     }
+
 
     /**
      * 获取每种viewType对应的layout文件

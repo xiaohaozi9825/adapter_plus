@@ -6,14 +6,12 @@ import android.widget.Toast;
 
 import com.iflytek.myapplication.adapter.MySingelTypeAdapter;
 import com.iflytek.myapplication.bean.FriendInfo;
-import com.iflytek.myapplication.databinding.ItemFriendBinding;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.ObservableArrayList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import pw.xiaohaozi.zkr.listener.OnClickListener;
-import pw.xiaohaozi.zkr.listener.OnLongClickListener;
+
 
 public class SingleTypeActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;

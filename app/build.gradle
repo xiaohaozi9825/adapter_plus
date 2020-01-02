@@ -44,7 +44,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 //    implementation 'com.github.xiaohaozi9825:adapter_plus:1.4'
     implementation 'androidx.cardview:cardview:1.0.0'
-
-    compileOnly 'com.github.xiaohaozi9825:AndroidUtils:v1.2'
+    implementation 'com.github.xiaohaozi9825:AndroidUtils:v1.3'
+//    compileOnly 'com.github.xiaohaozi9825:AndroidUtils:v1.2'
 
 }

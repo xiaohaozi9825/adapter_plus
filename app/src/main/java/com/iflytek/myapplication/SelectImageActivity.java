@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.ObservableArrayList;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import pw.xiaohaozi.zkr.listener.OnItemClickListener;
 
 public class SelectImageActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;

@@ -3,7 +3,7 @@ package com.iflytek.myapplication.bean;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
-import pw.xiaohaozi.zkr.adapter.RecyclerData;
+import pw.xiaohaozi.adapter_plus.adapter.RecyclerData;
 
 public class GoodsBottomInfo extends BaseObservable implements RecyclerData {
     private String total;//合计多少钱

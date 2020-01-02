@@ -7,10 +7,11 @@ import android.view.ViewGroup;
 import com.iflytek.myapplication.R;
 import com.iflytek.myapplication.databinding.ItemSelectImageBinding;
 
-import pw.xiaohaozi.zkr.adapter.SelectAdapter;
-import pw.xiaohaozi.zkr.holder.SelectHolder;
+import pw.xiaohaozi.adapter_plus.adapter.SelectAdapter;
+import pw.xiaohaozi.adapter_plus.holder.SelectHolder;
 
-    public class ImageSelectAdapter extends SelectAdapter<ItemSelectImageBinding, String, SelectHolder<ItemSelectImageBinding>> {
+
+public class ImageSelectAdapter extends SelectAdapter<ItemSelectImageBinding, String, SelectHolder<ItemSelectImageBinding>> {
         private int mHeight;
 
         public ImageSelectAdapter(int height) {
