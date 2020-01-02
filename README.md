@@ -17,6 +17,8 @@
 在dependencies 中添加依赖：
     
     implementation 'com.github.xiaohaozi9825:adapter_plus:1.5'
+    
+如果出现jar包重复问题，可以将修implementation改成compileOnly
 ## 2、各功能模块使用及效果图 ##
 ### 1、最最简单的使用（item viewType只有1中） ###
 创建一个适配器，并继承SimpleAdapter类，只需要实现onBindViewHolder()方法即可，简单粗暴大气；我们可以在onBindViewHolder()方法中绑定数据到View。
