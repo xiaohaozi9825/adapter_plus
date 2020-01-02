@@ -1,8 +1,6 @@
-package pw.xiaohaozi.zkr.holder;
+package pw.xiaohaozi.adapter_plus.holder;
 
 import android.view.View;
-
-import java.util.LinkedList;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;

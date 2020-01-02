@@ -1,4 +1,4 @@
-package pw.xiaohaozi.zkr.adapter;
+package pw.xiaohaozi.adapter_plus.adapter;
 
 
 import android.content.Context;
@@ -11,11 +11,11 @@ import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableList;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
-import pw.xiaohaozi.zkr.listener.OnClickListener;
-import pw.xiaohaozi.zkr.listener.OnItemClickListener;
-import pw.xiaohaozi.zkr.holder.ViewHolder;
-import pw.xiaohaozi.zkr.listener.OnItemLongClickListener;
-import pw.xiaohaozi.zkr.listener.OnLongClickListener;
+import pw.xiaohaozi.adapter_plus.listener.OnItemLongClickListener;
+import pw.xiaohaozi.adapter_plus.listener.OnClickListener;
+import pw.xiaohaozi.adapter_plus.listener.OnItemClickListener;
+import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
+import pw.xiaohaozi.adapter_plus.listener.OnLongClickListener;
 
 /**
  * 该类对RecyclerView.Adapter做了进一步封装，时使其使用更加简单方便

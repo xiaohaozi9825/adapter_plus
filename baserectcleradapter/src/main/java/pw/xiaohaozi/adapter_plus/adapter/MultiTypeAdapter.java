@@ -1,7 +1,7 @@
-package pw.xiaohaozi.zkr.adapter;
+package pw.xiaohaozi.adapter_plus.adapter;
 
 import androidx.databinding.ViewDataBinding;
-import pw.xiaohaozi.zkr.holder.ViewHolder;
+import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
 
 /**
  * 多类型viewType

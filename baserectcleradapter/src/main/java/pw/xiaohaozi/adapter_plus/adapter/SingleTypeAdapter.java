@@ -1,4 +1,4 @@
-package pw.xiaohaozi.zkr.adapter;
+package pw.xiaohaozi.adapter_plus.adapter;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import androidx.databinding.ViewDataBinding;
-import pw.xiaohaozi.zkr.holder.ViewHolder;
+import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
 
 /**
  * 只有一种类型item

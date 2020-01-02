@@ -1,4 +1,4 @@
-package pw.xiaohaozi.zkr.listener;
+package pw.xiaohaozi.adapter_plus.listener;
 
 import androidx.databinding.ViewDataBinding;
 

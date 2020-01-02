@@ -1,4 +1,4 @@
-package pw.xiaohaozi.zkr.adapter;
+package pw.xiaohaozi.adapter_plus.adapter;
 
 public interface RecyclerData {
     /**

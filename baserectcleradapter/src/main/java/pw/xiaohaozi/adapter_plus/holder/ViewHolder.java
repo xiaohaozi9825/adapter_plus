@@ -1,14 +1,14 @@
-package pw.xiaohaozi.zkr.holder;
+package pw.xiaohaozi.adapter_plus.holder;
 
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
-import pw.xiaohaozi.zkr.listener.OnClickListener;
-import pw.xiaohaozi.zkr.listener.OnItemClickListener;
-import pw.xiaohaozi.zkr.listener.OnItemLongClickListener;
-import pw.xiaohaozi.zkr.listener.OnLongClickListener;
+import pw.xiaohaozi.adapter_plus.listener.OnItemLongClickListener;
+import pw.xiaohaozi.adapter_plus.listener.OnClickListener;
+import pw.xiaohaozi.adapter_plus.listener.OnItemClickListener;
+import pw.xiaohaozi.adapter_plus.listener.OnLongClickListener;
 
 
 public class ViewHolder<VDB extends ViewDataBinding> extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {

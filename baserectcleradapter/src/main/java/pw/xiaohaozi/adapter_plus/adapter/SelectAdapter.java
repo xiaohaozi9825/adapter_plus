@@ -1,10 +1,10 @@
-package pw.xiaohaozi.zkr.adapter;
+package pw.xiaohaozi.adapter_plus.adapter;
 
 import java.util.LinkedList;
 
 import androidx.databinding.ObservableList;
 import androidx.databinding.ViewDataBinding;
-import pw.xiaohaozi.zkr.holder.SelectHolder;
+import pw.xiaohaozi.adapter_plus.holder.SelectHolder;
 
 
 public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends SelectHolder<VDB>> extends SingleTypeAdapter<VDB, D, VH> {
