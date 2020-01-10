@@ -180,7 +180,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
                 LayoutInflater.from(parent.getContext()),
                 getLayoutRes(viewType), parent,
                 false);
-        VH vh = onCreateViewHolder(binding, viewType);
+        VH vh = onCreateViewHolder((RecyclerView) parent, binding, viewType);
         if (mOnItemClickListener != null) vh.setOnItemClickListener(mOnItemClickListener);
         if (mOnClickListener != null) vh.setOnClickListener(mOnClickListener);
         if (mOnItemLongClickListener != null)
@@ -195,7 +195,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         onBindViewHolder(position, (VH) viewHolder);
     }
 
-    protected abstract VH onCreateViewHolder(VDB binding, int viewType);
+    protected abstract VH onCreateViewHolder(@NonNull RecyclerView recyclerView, VDB binding, int viewType);
 
     protected abstract void onBindViewHolder(int position, VH viewHolder);
 

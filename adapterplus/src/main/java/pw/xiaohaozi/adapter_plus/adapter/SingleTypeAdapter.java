@@ -7,7 +7,9 @@ import java.lang.reflect.Type;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.RecyclerView;
 import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
 
 /**
@@ -38,7 +40,7 @@ public abstract class SingleTypeAdapter<VDB extends ViewDataBinding, D, VH exten
 
 
     @Override
-    protected VH onCreateViewHolder(VDB binding, int viewType) {
+    protected VH onCreateViewHolder(@NonNull RecyclerView recyclerView, VDB binding, int viewType) {
         // FIXME: 2019/12/18 0018 这里使用泛型实例化ViewHolder，目前测试ok，不保证以后不会出现问题
         try {
             Type[] types = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments();
