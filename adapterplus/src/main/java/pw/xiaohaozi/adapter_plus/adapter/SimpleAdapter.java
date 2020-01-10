@@ -1,7 +1,9 @@
 package pw.xiaohaozi.adapter_plus.adapter;
 
 
+import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.RecyclerView;
 import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
 
 /**
@@ -21,7 +23,7 @@ public abstract class SimpleAdapter<VDB extends ViewDataBinding, D> extends Sing
      * @return
      */
     @Override
-    protected ViewHolder<VDB> onCreateViewHolder(VDB binding, int viewType) {
+    protected ViewHolder<VDB> onCreateViewHolder(@NonNull RecyclerView recyclerView, VDB binding, int viewType) {
         return new ViewHolder<>(binding);
     }
 }
