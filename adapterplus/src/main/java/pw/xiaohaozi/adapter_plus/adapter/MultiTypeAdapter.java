@@ -1,5 +1,7 @@
 package pw.xiaohaozi.adapter_plus.adapter;
 
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,7 +13,7 @@ import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
  */
 public abstract class MultiTypeAdapter extends BaseAdapter<ViewDataBinding, RecyclerData, ViewHolder<ViewDataBinding>> {
     @Override
-    protected ViewHolder<ViewDataBinding> onCreateViewHolder(@NonNull RecyclerView recyclerView, ViewDataBinding binding, int viewType) {
+    protected <VG extends ViewGroup> ViewHolder<ViewDataBinding> onCreateViewHolder(@NonNull VG parent, ViewDataBinding binding, int viewType) {
         return new ViewHolder<>(binding);
     }
 }

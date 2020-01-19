@@ -195,7 +195,15 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         onBindViewHolder(position, (VH) viewHolder);
     }
 
-    protected abstract VH onCreateViewHolder(@NonNull RecyclerView recyclerView, VDB binding, int viewType);
+    /**
+     * 创建ViewHolder
+     *
+     * @param parent   如果该adapter是给RecyclerView用的，则parent就是RecyclerView类型
+     * @param binding
+     * @param viewType
+     * @return
+     */
+    protected abstract <VG extends ViewGroup> VH onCreateViewHolder(@NonNull VG parent, VDB binding, int viewType);
 
     protected abstract void onBindViewHolder(int position, VH viewHolder);
 

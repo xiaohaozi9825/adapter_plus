@@ -1,5 +1,7 @@
 package pw.xiaohaozi.adapter_plus.adapter;
 
+import android.view.ViewGroup;
+
 import java.util.LinkedList;
 
 import androidx.annotation.NonNull;
@@ -130,8 +132,8 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
     }
 
     @Override
-    protected VH onCreateViewHolder(@NonNull RecyclerView recyclerView, VDB binding, int viewType) {
-        final VH vh = super.onCreateViewHolder(recyclerView,binding, viewType);
+    protected<VG extends ViewGroup> VH onCreateViewHolder(@NonNull VG parent, VDB binding, int viewType) {
+        final VH vh = super.onCreateViewHolder(parent,binding, viewType);
         vh.setOnSelectChangeListener((selectHolder, position) -> {
             //先判断该item是否已经被选中了，如果是，则取消选择
             if (mSelectPosition.contains(position)) {

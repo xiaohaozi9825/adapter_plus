@@ -24,10 +24,7 @@ public class SelectImageActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, SPAN_COUNT, RecyclerView.VERTICAL, false));
         mRecyclerView.post(() -> {
-            //如果想要正方形，还需要减去cardView的margin值
-            int itemHeight = mRecyclerView.getMeasuredWidth() / SPAN_COUNT;
-
-            mImageSelectAdapter = new ImageSelectAdapter(itemHeight);
+            mImageSelectAdapter = new ImageSelectAdapter(SPAN_COUNT);
             mImageSelectAdapter.setOnItemClickListener(itemSelectImageBinding -> {
                 Toast.makeText(getApplicationContext(), "点击查看大图", Toast.LENGTH_SHORT).show();
             });
