@@ -19,6 +19,13 @@
     
     implementation 'com.github.xiaohaozi9825:adapter_plus:1.5'
     
+    
+混淆配置：
+
+    #adapter_plus需要配置
+    #-keep class 你项目包名.databinding.**{ *; }，如我项目包名为com.iflytek.queuingmachine
+    -keep class com.iflytek.queuingmachine.databinding.**{ *; }
+    
 如果出现jar包重复问题，可以将修implementation改成compileOnly
 ## 2、各功能模块使用及效果图 ##
 ### 1、最最简单的使用（item viewType只有1中） ###
