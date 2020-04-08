@@ -8,14 +8,16 @@ import pw.xiaohaozi.adapter_plus.adapter.SingleTypeAdapter;
 
 
 /**
-     * 好友列表适配器
-     * 继承SingleTypeAdapter，可自定义viewholder
-     */
-    public class MySingelTypeAdapter extends SingleTypeAdapter<ItemFriendBinding, FriendInfo,
-                MySingelTypeHolder> {
+ * 好友列表适配器
+ * 继承SingleTypeAdapter，可自定义viewholder
+ */
+public class MySingelTypeAdapter extends SingleTypeAdapter<ItemFriendBinding, FriendInfo,
+        MySingelTypeHolder> {
 
-        @Override
-        protected void onBindViewHolder(int position, MySingelTypeHolder viewHolder) {
-            viewHolder.getBinding().setFriendInfo(getDataList().get(position));
-        }
+    @Override
+    protected void onBindViewHolder(MySingelTypeHolder mySingelTypeHolder,
+                                    int position, ItemFriendBinding itemFriendBinding,
+                                    FriendInfo friendInfo) {
+        itemFriendBinding.setFriendInfo(friendInfo);
     }
+}

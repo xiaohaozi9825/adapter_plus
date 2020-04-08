@@ -22,14 +22,14 @@ public class ImageSelectAdapter extends SelectAdapter<ItemSelectImageBinding, St
 
 
     @Override
-    protected <VG extends ViewGroup> SelectHolder<ItemSelectImageBinding> onCreateViewHolder(@NonNull VG parent, ItemSelectImageBinding binding, int viewType) {
-        SelectHolder<ItemSelectImageBinding> viewHolder = super.onCreateViewHolder(parent, binding, viewType);
-        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) binding.cardView.getLayoutParams();
-        layoutParams.height = (parent.getWidth() - parent.getPaddingLeft() - parent.getPaddingRight()) / mSpanCount;
-        binding.cardView.setLayoutParams(layoutParams);
+    protected <VG extends ViewGroup> SelectHolder<ItemSelectImageBinding> onCreateViewHolder(@NonNull VG vg, ItemSelectImageBinding vdb, int viewType) {
+        SelectHolder<ItemSelectImageBinding> viewHolder = super.onCreateViewHolder(vg, vdb, viewType);
+        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) vdb.cardView.getLayoutParams();
+        layoutParams.height = (vg.getWidth() - vg.getPaddingLeft() - vg.getPaddingRight()) / mSpanCount;
+        vdb.cardView.setLayoutParams(layoutParams);
 
         //指定由哪个控件触发选中事件，默认 binding.getRoot()
-        viewHolder.setTrigger(binding.ivSelect);
+        viewHolder.setTrigger(vdb.ivSelect);
         return viewHolder;
     }
 
@@ -43,15 +43,17 @@ public class ImageSelectAdapter extends SelectAdapter<ItemSelectImageBinding, St
     }
 
     @Override
-    protected void onBindViewHolder(SelectHolder<ItemSelectImageBinding> viewHolder, int position, boolean isSelect) {
-        ItemSelectImageBinding binding = viewHolder.getBinding();
-        binding.setUrl(getDataList().get(position));
+    protected void onBindViewHolder(SelectHolder<ItemSelectImageBinding> itemSelectImageBindingSelectHolder,
+                                    int position, ItemSelectImageBinding itemSelectImageBinding,
+                                    String s, boolean isSelect) {
+        itemSelectImageBinding.setUrl(s);
         if (isSelect) {
-            binding.viewSelect.setVisibility(View.VISIBLE);
-            binding.ivSelect.setImageResource(R.drawable.ic_select);
+            itemSelectImageBinding.viewSelect.setVisibility(View.VISIBLE);
+            itemSelectImageBinding.ivSelect.setImageResource(R.drawable.ic_select);
         } else {
-            binding.viewSelect.setVisibility(View.INVISIBLE);
-            binding.ivSelect.setImageResource(R.drawable.ic_no_select);
+            itemSelectImageBinding.viewSelect.setVisibility(View.INVISIBLE);
+            itemSelectImageBinding.ivSelect.setImageResource(R.drawable.ic_no_select);
         }
     }
+
 }

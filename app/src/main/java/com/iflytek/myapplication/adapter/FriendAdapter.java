@@ -8,12 +8,14 @@ import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
 
 
 /**
-     * 好友列表适配器
-     * 单类型最简单用法，只需要绑定数据即可
-     */
-    public class FriendAdapter extends SimpleAdapter<ItemFriendBinding, FriendInfo> {
-        @Override
-        protected void onBindViewHolder(int position, ViewHolder<ItemFriendBinding> viewHolder) {
-            viewHolder.getBinding().setFriendInfo(getDataList().get(position));
-        }
+ * 好友列表适配器
+ * 单类型最简单用法，只需要绑定数据即可
+ */
+public class FriendAdapter extends SimpleAdapter<ItemFriendBinding, FriendInfo> {
+
+    @Override
+    protected void onBindViewHolder(ViewHolder<ItemFriendBinding> itemFriendBindingViewHolder,
+                                    int position, ItemFriendBinding itemFriendBinding, FriendInfo friendInfo) {
+        itemFriendBinding.setFriendInfo(friendInfo);
     }
+}

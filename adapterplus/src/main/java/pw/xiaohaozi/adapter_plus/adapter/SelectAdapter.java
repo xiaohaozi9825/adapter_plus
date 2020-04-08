@@ -132,8 +132,8 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
     }
 
     @Override
-    protected<VG extends ViewGroup> VH onCreateViewHolder(@NonNull VG parent, VDB binding, int viewType) {
-        final VH vh = super.onCreateViewHolder(parent,binding, viewType);
+    protected<VG extends ViewGroup> VH onCreateViewHolder(@NonNull VG vg, VDB vdb, int viewType) {
+        final VH vh = super.onCreateViewHolder(vg, vdb, viewType);
         vh.setOnSelectChangeListener((selectHolder, position) -> {
             //先判断该item是否已经被选中了，如果是，则取消选择
             if (mSelectPosition.contains(position)) {
@@ -187,10 +187,11 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
     }
 
     @Override
-    final protected void onBindViewHolder(int position, VH viewHolder) {
+    protected void onBindViewHolder(VH vh, int position, VDB vdb, D d) {
         boolean isSelect = mSelectPosition.contains(position);
-        onBindViewHolder(viewHolder, position, isSelect);
+        onBindViewHolder(vh, position, vdb, d, isSelect);
     }
+
 
     /**
      * 当选中状态发生改变时会回调该方法
@@ -204,12 +205,13 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
      * 绑定数据到view中
      * <p>
      * 该方法在选中状态改变时也会被调用
-     *
-     * @param viewHolder
+     *  @param vh
      * @param position
+     * @param vdb
+     * @param d
      * @param isSelect
      */
-    protected abstract void onBindViewHolder(VH viewHolder, int position, boolean isSelect);
+    protected abstract void onBindViewHolder(VH vh, int position, VDB vdb, D d, boolean isSelect);
 
     /**
      * 警告：当选择数超过最大数，而且不自动取消旧的被选中的item时，会触发该警告

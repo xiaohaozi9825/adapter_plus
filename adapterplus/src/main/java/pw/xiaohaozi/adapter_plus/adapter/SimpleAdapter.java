@@ -20,12 +20,12 @@ public abstract class SimpleAdapter<VDB extends ViewDataBinding, D> extends Sing
      * 父类SingleTypeAdapter中是使用反射创建ViewHolder的，对性能有一定影响
      * 而这里已经明确了ViewHolder的类型了，所以直接用new的方式创建
      *
-     * @param binding
+     * @param vdb
      * @param viewType
      * @return
      */
     @Override
-    protected <VG extends ViewGroup>ViewHolder<VDB> onCreateViewHolder(@NonNull VG recyclerView, VDB binding, int viewType) {
-        return new ViewHolder<>(binding);
+    protected <VG extends ViewGroup>ViewHolder<VDB> onCreateViewHolder(@NonNull VG vg, VDB vdb, int viewType) {
+        return new ViewHolder<>(vdb);
     }
 }

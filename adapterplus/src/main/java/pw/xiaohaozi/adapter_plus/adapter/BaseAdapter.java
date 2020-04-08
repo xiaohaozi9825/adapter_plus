@@ -18,7 +18,7 @@ import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
 import pw.xiaohaozi.adapter_plus.listener.OnLongClickListener;
 
 /**
- * 该类对RecyclerView.Adapter做了进一步封装，时使其使用更加简单方便
+ * 该类对RecyclerView.Adapter做了进一步封装，使其使用更加简单方便
  *
  * @param <VDB>
  * @param <D>
@@ -180,7 +180,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
                 LayoutInflater.from(parent.getContext()),
                 getLayoutRes(viewType), parent,
                 false);
-        VH vh = onCreateViewHolder((RecyclerView) parent, binding, viewType);
+        VH vh = onCreateViewHolder(parent, binding, viewType);
         if (mOnItemClickListener != null) vh.setOnItemClickListener(mOnItemClickListener);
         if (mOnClickListener != null) vh.setOnClickListener(mOnClickListener);
         if (mOnItemLongClickListener != null)
@@ -192,7 +192,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-        onBindViewHolder(position, (VH) viewHolder);
+        onBindViewHolder((VH) viewHolder, position, ((VH) viewHolder).getBinding(), mDataList.get(position));
     }
 
     /**
@@ -205,7 +205,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      */
     protected abstract <VG extends ViewGroup> VH onCreateViewHolder(@NonNull VG parent, VDB binding, int viewType);
 
-    protected abstract void onBindViewHolder(int position, VH viewHolder);
+    protected abstract void onBindViewHolder(VH vh, int position, VDB vdb, D d);
 
     protected abstract int getLayoutRes(int viewType);
 

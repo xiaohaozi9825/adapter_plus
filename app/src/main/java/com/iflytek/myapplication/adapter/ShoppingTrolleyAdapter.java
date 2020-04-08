@@ -10,6 +10,7 @@ import com.iflytek.myapplication.databinding.ItemTopBinding;
 
 import androidx.databinding.ViewDataBinding;
 import pw.xiaohaozi.adapter_plus.adapter.MultiTypeAdapter;
+import pw.xiaohaozi.adapter_plus.adapter.RecyclerData;
 import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
 
 
@@ -39,32 +40,35 @@ public class ShoppingTrolleyAdapter extends MultiTypeAdapter {
      * <p>
      * 可以使用getItemViewType(position)获取对应的viewType
      *
+     * @param viewDataBindingViewHolder
      * @param position
-     * @param viewHolder
+     * @param viewDataBinding
+     * @param recyclerData
      */
     @Override
-    protected void onBindViewHolder(int position,  ViewHolder<ViewDataBinding> viewHolder) {
+    protected void onBindViewHolder(ViewHolder<ViewDataBinding> viewDataBindingViewHolder,
+                                    int position, ViewDataBinding viewDataBinding,
+                                    RecyclerData recyclerData) {
         switch (getItemViewType(position)) {
             case 0:
-                ((ItemTopBinding) viewHolder.getBinding()).setGoodsTop((GoodsTopInfo) getDataList().get(position));
+                ((ItemTopBinding) viewDataBinding).setGoodsTop((GoodsTopInfo) recyclerData);
 //                TopHolder topHolder = (TopHolder) viewHolder;
 //                topHolder.getBinding().setGoodsTop((GoodsTopInfo) getDataList().get(position));
                 break;
             case 1:
-                ((ItemCentreBinding) viewHolder.getBinding()).setGoodsCenter((GoodsCentreInfo) getDataList().get(position));
+                ((ItemCentreBinding) viewDataBinding).setGoodsCenter((GoodsCentreInfo) recyclerData);
 
 //                CentreHolder centerHolder = (CentreHolder) viewHolder;
 //                centerHolder.getBinding().setGoodsCenter((GoodsCentreInfo) getDataList().get(position));
                 break;
             case 2:
-                ((ItemBottomBinding) viewHolder.getBinding()).setGoodsBottom((GoodsBottomInfo) getDataList().get(position));
+                ((ItemBottomBinding)viewDataBinding).setGoodsBottom((GoodsBottomInfo) recyclerData);
 
 //                BottomHolder bottomHolder = (BottomHolder) viewHolder;
 //                bottomHolder.getBinding().setGoodsBottom((GoodsBottomInfo) getDataList().get(position));
                 break;
         }
     }
-
 
     /**
      * 获取每种viewType对应的layout文件
