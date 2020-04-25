@@ -3,6 +3,7 @@ package pw.xiaohaozi.adapter_plus.adapter;
 import android.view.ViewGroup;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableList;
@@ -126,13 +127,13 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
     }
 
     @Override
-    public void refresh(ObservableList<D> list) {
+    public boolean refresh(List<D> list) {
         mSelectPosition.clear();
-        super.refresh(list);
+        return super.refresh(list);
     }
 
     @Override
-    protected<VG extends ViewGroup> VH onCreateViewHolder(@NonNull VG vg, VDB vdb, int viewType) {
+    protected <VG extends ViewGroup> VH onCreateViewHolder(@NonNull VG vg, VDB vdb, int viewType) {
         final VH vh = super.onCreateViewHolder(vg, vdb, viewType);
         vh.setOnSelectChangeListener((selectHolder, position) -> {
             //先判断该item是否已经被选中了，如果是，则取消选择
@@ -205,7 +206,8 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
      * 绑定数据到view中
      * <p>
      * 该方法在选中状态改变时也会被调用
-     *  @param vh
+     *
+     * @param vh
      * @param position
      * @param vdb
      * @param d

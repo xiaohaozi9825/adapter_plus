@@ -22,11 +22,13 @@ public class ImageSelectAdapter extends SelectAdapter<ItemSelectImageBinding, St
 
 
     @Override
-    protected <VG extends ViewGroup> SelectHolder<ItemSelectImageBinding> onCreateViewHolder(@NonNull VG vg, ItemSelectImageBinding vdb, int viewType) {
+    protected <VG extends ViewGroup> SelectHolder<ItemSelectImageBinding>
+    onCreateViewHolder(@NonNull VG vg, ItemSelectImageBinding vdb, int viewType) {
         SelectHolder<ItemSelectImageBinding> viewHolder = super.onCreateViewHolder(vg, vdb, viewType);
         RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) vdb.cardView.getLayoutParams();
         layoutParams.height = (vg.getWidth() - vg.getPaddingLeft() - vg.getPaddingRight()) / mSpanCount;
         vdb.cardView.setLayoutParams(layoutParams);
+
 
         //指定由哪个控件触发选中事件，默认 binding.getRoot()
         viewHolder.setTrigger(vdb.ivSelect);

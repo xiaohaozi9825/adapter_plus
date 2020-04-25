@@ -20,10 +20,10 @@ public class ViewHolder<VDB extends ViewDataBinding> extends RecyclerView.ViewHo
     OnLongClickListener<VDB> mOnLongClickListener;
 
     //①将原来的形参 View itemView 改为 Binding
-    public ViewHolder(@NonNull VDB binding) {
+    public ViewHolder(@NonNull VDB vdb) {
         //②super中需要返回itemView，所以需要传入Binding.getRoot()
-        super(binding.getRoot());
-        mBinding = binding;
+        super(vdb.getRoot());
+        mBinding = vdb;
     }
 
     public VDB getBinding() {
@@ -50,7 +50,6 @@ public class ViewHolder<VDB extends ViewDataBinding> extends RecyclerView.ViewHo
         } else {
             if (mOnLongClickListener != null)
                 mOnLongClickListener.onLongClick(v, mBinding);
-
         }
         return true;
     }

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ObservableArrayList;
@@ -25,7 +27,7 @@ import pw.xiaohaozi.adapter_plus.listener.OnLongClickListener;
  * @param <VH>
  */
 public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends ViewHolder<VDB>> extends RecyclerView.Adapter {
-    private ObservableList<D> mDataList;
+    private List<D> mDataList;
     protected Context mContext;
     private OnItemClickListener mOnItemClickListener;
     private OnClickListener mOnClickListener;
@@ -40,11 +42,11 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      * @param list
      */
     @Deprecated
-    public void add(ObservableArrayList<D> list) {
+    public boolean add(List<D> list) {
         if (mDataList == null) {
-            refresh(list);
+            return refresh(list);
         } else {
-            mDataList.addAll(list);
+            return mDataList.addAll(list);
         }
     }
 
@@ -56,15 +58,25 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      * @param data
      */
     @Deprecated
-    public void add(D data) {
+    public boolean add(D data) {
         if (mDataList == null) {
             mDataList = new ObservableArrayList<>();
             mDataList.add(data);
-            refresh(mDataList);
+            return refresh(mDataList);
         } else {
-            if (!mDataList.contains(data)) {
-                mDataList.add(data);
+//            if (!mDataList.contains(data)) {
+//                mDataList.add(data);
+//            }
+
+            if (mDataList instanceof ObservableList)
+                return mDataList.add(data);
+            else {
+                boolean add = mDataList.add(data);
+                if (add) notifyItemInserted(mDataList.size() - 1);
+                return add;
             }
+
+
         }
     }
 
@@ -77,13 +89,15 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      * @param data
      */
     @Deprecated
-    public void add(int position, D data) {
+    public boolean add(int position, D data) {
         if (mDataList == null) {
             mDataList = new ObservableArrayList<>();
             mDataList.add(data);
-            refresh(mDataList);
+            return refresh(mDataList);
         } else {
             mDataList.add(position, data);
+            if (!(mDataList instanceof ObservableList)) notifyItemInserted(position);
+            return true;
         }
     }
 
@@ -95,9 +109,10 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      * @param position
      */
     @Deprecated
-    public void remove(int position) {
-        if (mDataList == null) return;
-        mDataList.remove(position);
+    public boolean remove(int position) {
+        if (mDataList == null) return false;
+        D d = mDataList.remove(position);
+        return d != null;
     }
 
     /**
@@ -108,9 +123,10 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      * @param data
      */
     @Deprecated
-    public void remove(D data) {
-        if (mDataList == null) return;
-        mDataList.remove(data);
+    public boolean remove(D data) {
+        if (mDataList == null) return false;
+        if (data == null) return false;
+        return mDataList.remove(data);
     }
 
     /**
@@ -119,9 +135,10 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      * 弃用原因：如果数据 D 继承了BaseObservable,则可以实时更新数据了，无需调用该方法
      */
     @Deprecated
-    public void remove() {
-        if (mDataList == null) return;
+    public boolean remove() {
+        if (mDataList == null) return false;
         mDataList.clear();
+        return true;
     }
 
     /**
@@ -129,12 +146,14 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      *
      * @param list
      */
-    public void refresh(ObservableList<D> list) {
-        if (list == null) return;
+    public boolean refresh(List<D> list) {
+        if (list == null) return false;
         mDataList = list;
-        mDataList.addOnListChangedCallback(new DynamicChangeCallback(this));
+        if (mDataList instanceof ObservableList) {
+            ((ObservableList) mDataList).addOnListChangedCallback(new DynamicChangeCallback(this));
+        }
         notifyDataSetChanged();
-
+        return true;
     }
 
     /**
@@ -168,7 +187,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         return (A) this;
     }
 
-    public ObservableList<D> getDataList() {
+    public List<D> getDataList() {
         return mDataList;
     }
 
