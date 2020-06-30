@@ -1,7 +1,6 @@
 package com.iflytek.myapplication;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import com.iflytek.myapplication.adapter.MySingelTypeAdapter;
@@ -33,19 +32,19 @@ public class SingleTypeActivity extends AppCompatActivity {
                 this, RecyclerView.VERTICAL, false));
 
     mSingelTypeAdapter = new MySingelTypeAdapter();
-    mSingelTypeAdapter.setOnItemClickListener(binding ->
+    mSingelTypeAdapter.setOnItemClickListener((v,binding,position) ->
             Toast.makeText(this, "您点击了：" + binding.getFriendInfo().getName(),
                     Toast.LENGTH_SHORT).show()
     );
-    mSingelTypeAdapter.setOnItemLongClickListener(itemFriendBinding -> {
+    mSingelTypeAdapter.setOnItemLongClickListener((v,itemFriendBinding,position)  -> {
         Toast.makeText(this, "您长按了：" + itemFriendBinding.getFriendInfo().getName(),
                 Toast.LENGTH_SHORT).show();
     });
-    mSingelTypeAdapter.setOnClickListener((view, itemFriendBinding) ->
+    mSingelTypeAdapter.setOnClickListener((view, itemFriendBinding, layoutPosition) ->
             Toast.makeText(this, "您点击了：" + itemFriendBinding.getFriendInfo().getName()
                     + "的头像", Toast.LENGTH_SHORT).show()
     );
-    mSingelTypeAdapter.setOnLongClickListener((view, itemFriendBinding) ->
+    mSingelTypeAdapter.setOnLongClickListener((view, itemFriendBinding, layoutPosition) ->
             Toast.makeText(this, "您长按了：" + itemFriendBinding.getFriendInfo().getName()
                     + "的头像", Toast.LENGTH_SHORT).show()
     );

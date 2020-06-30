@@ -34,10 +34,10 @@ public class ViewHolder<VDB extends ViewDataBinding> extends RecyclerView.ViewHo
     public void onClick(View v) {
         if (v.getId() == mBinding.getRoot().getId()) {
             if (mOnItemClickListener != null)
-                mOnItemClickListener.onItemClick(mBinding);
+                mOnItemClickListener.onItemClick(v, mBinding, getLayoutPosition());
         } else {
             if (mOnClickListener != null) {
-                mOnClickListener.onClick(v, mBinding);
+                mOnClickListener.onClick(v, mBinding, getLayoutPosition());
             }
         }
     }
@@ -46,10 +46,10 @@ public class ViewHolder<VDB extends ViewDataBinding> extends RecyclerView.ViewHo
     public boolean onLongClick(View v) {
         if (v.getId() == mBinding.getRoot().getId()) {
             if (mOnItemLongClickListener != null)
-                mOnItemLongClickListener.onItemLongClick(mBinding);
+                mOnItemLongClickListener.onItemLongClick(v, mBinding, getLayoutPosition());
         } else {
             if (mOnLongClickListener != null)
-                mOnLongClickListener.onLongClick(v, mBinding);
+                mOnLongClickListener.onLongClick(v, mBinding, getLayoutPosition());
         }
         return true;
     }

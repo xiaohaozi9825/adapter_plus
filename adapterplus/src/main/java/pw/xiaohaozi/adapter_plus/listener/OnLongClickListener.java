@@ -7,9 +7,9 @@ import androidx.databinding.ViewDataBinding;
 public interface OnLongClickListener<VDB extends ViewDataBinding> {
     /**
      * View 点击事件
-     *
-     * @param view 被点击的View
+     *  @param view 被点击的View
      * @param vdb
+     * @param layoutPosition
      */
-    void onLongClick(View view, VDB vdb);
+    void onLongClick(View view, VDB vdb, int layoutPosition);
 }

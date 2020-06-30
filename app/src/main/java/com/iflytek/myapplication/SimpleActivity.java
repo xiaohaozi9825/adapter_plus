@@ -4,12 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.ObservableArrayList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import pw.xiaohaozi.adapter_plus.listener.OnItemClickListener;
+import pw.xiaohaozi.adapter_plus.listener.OnItemLongClickListener;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.iflytek.myapplication.adapter.FriendAdapter;
 import com.iflytek.myapplication.bean.FriendInfo;
+import com.iflytek.myapplication.databinding.ItemFriendBinding;
 
 public class SimpleActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
@@ -31,12 +35,12 @@ public class SimpleActivity extends AppCompatActivity {
                 this, RecyclerView.VERTICAL, false));
 
         mFriendAdapter = new FriendAdapter();
-        mFriendAdapter.setOnItemClickListener(binding ->
-                Toast.makeText(this, "您点击了：" + binding.getFriendInfo().getName(),
+        mFriendAdapter.setOnItemClickListener((v, itemFriendBinding, position) ->
+                Toast.makeText(this, "您点击了：" + itemFriendBinding.getFriendInfo().getName(),
                         Toast.LENGTH_SHORT).show()
         );
-        mFriendAdapter.setOnItemLongClickListener(binding ->
-                Toast.makeText(this, "您长按了：" + binding.getFriendInfo().getName(),
+        mFriendAdapter.setOnItemLongClickListener((v, itemFriendBinding, position) ->
+                Toast.makeText(this, "您长按了：" + itemFriendBinding.getFriendInfo().getName(),
                         Toast.LENGTH_SHORT).show());
 
         mRecyclerView.setAdapter(mFriendAdapter);

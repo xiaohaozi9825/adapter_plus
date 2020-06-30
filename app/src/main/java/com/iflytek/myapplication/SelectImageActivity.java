@@ -1,6 +1,7 @@
 package com.iflytek.myapplication;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.iflytek.myapplication.adapter.ImageSelectAdapter;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.ObservableArrayList;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import pw.xiaohaozi.adapter_plus.listener.OnItemClickListener;
 
 public class SelectImageActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
@@ -25,7 +27,7 @@ public class SelectImageActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, SPAN_COUNT, RecyclerView.VERTICAL, false));
         mRecyclerView.post(() -> {
             mImageSelectAdapter = new ImageSelectAdapter(SPAN_COUNT);
-            mImageSelectAdapter.setOnItemClickListener(itemSelectImageBinding -> {
+            mImageSelectAdapter.setOnItemClickListener((v, itemSelectImageBinding, position) -> {
                 Toast.makeText(getApplicationContext(), "点击查看大图", Toast.LENGTH_SHORT).show();
             });
             mRecyclerView.setAdapter(mImageSelectAdapter);
