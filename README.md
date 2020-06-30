@@ -17,7 +17,7 @@
     }
 在dependencies 中添加依赖：
     
-    implementation 'com.github.xiaohaozi9825:adapter_plus:1.5'
+    implementation 'com.github.xiaohaozi9825:adapter_plus:1.9'
     
     
 混淆配置：
