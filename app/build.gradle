@@ -48,5 +48,4 @@ dependencies {
     implementation project(path: ':adapterplus')
 //    implementation 'com.github.xiaohaozi9825:adapter_plus:1.5'
 
-
 }

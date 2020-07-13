@@ -35,14 +35,14 @@ public class ImageSelectAdapter extends SelectAdapter<ItemSelectImageBinding, St
         return viewHolder;
     }
 
-    @Override
-    protected void onSelectChange(int position, boolean isSelect) {
-        if (isSelect) {
-            Log.i("选择", "onSelectChange: +++ " + position);
-        } else {
-            Log.i("选择", "onSelectChange: --- " + position);
-        }
-    }
+//    @Override
+//    protected void onSelectChange(int position, boolean isSelect) {
+//        if (isSelect) {
+//            Log.i("选择", "onSelectChange: +++ " + position);
+//        } else {
+//            Log.i("选择", "onSelectChange: --- " + position);
+//        }
+//    }
 
     @Override
     protected void onBindViewHolder(SelectHolder<ItemSelectImageBinding> itemSelectImageBindingSelectHolder,

@@ -13,10 +13,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mBtnMultiType;
     private Button mBtnSelect;
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

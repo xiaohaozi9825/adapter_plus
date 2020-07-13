@@ -6,9 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.ObservableList;
 import androidx.databinding.ViewDataBinding;
-import androidx.recyclerview.widget.RecyclerView;
 import pw.xiaohaozi.adapter_plus.holder.SelectHolder;
 
 
@@ -18,6 +16,7 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
     private boolean isAutoRemove = true;//当超出选中个数后是否自动删除最先选中的
     private boolean isNoCancel = false;//是否禁止取消,当再次点击被选中的目标是，不执行任何操作
     private Warning mAutoRemoveWarning;
+    private OnSelectChange<D> mOnSelectChange;
 
     /**
      * 最多可以选择多少项
@@ -200,7 +199,11 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
      * @param position 被改变的索引
      * @param isSelect 是否被选中
      */
-    protected abstract void onSelectChange(int position, boolean isSelect);
+    protected void onSelectChange(int position, boolean isSelect) {
+        if (mOnSelectChange != null) {
+            mOnSelectChange.onSelectChange(position, isSelect, getDataList().get(position));
+        }
+    }
 
     /**
      * 绑定数据到view中
@@ -220,5 +223,13 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
      */
     public interface Warning {
         void warn(String msg);
+    }
+
+    public void setOnSelectChange(OnSelectChange<D> onSelectChange) {
+        mOnSelectChange = onSelectChange;
+    }
+
+    public interface OnSelectChange<D> {
+        void onSelectChange(int position, boolean isSelect, D d);
     }
 }
