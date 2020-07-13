@@ -225,10 +225,20 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
         void warn(String msg);
     }
 
+    /**
+     * 设置选中状态改变监听事件
+     *
+     * @param onSelectChange
+     */
     public void setOnSelectChange(OnSelectChange<D> onSelectChange) {
         mOnSelectChange = onSelectChange;
     }
 
+    /**
+     * 选中状态改变监听
+     *
+     * @param <D>
+     */
     public interface OnSelectChange<D> {
         void onSelectChange(int position, boolean isSelect, D d);
     }
