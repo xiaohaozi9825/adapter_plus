@@ -199,7 +199,7 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
      * @param position 被改变的索引
      * @param isSelect 是否被选中
      */
-    protected void onSelectChange(int position, boolean isSelect) {
+    private void onSelectChange(int position, boolean isSelect) {
         if (mOnSelectChange != null) {
             mOnSelectChange.onSelectChange(position, isSelect, getDataList().get(position));
         }
