@@ -30,6 +30,7 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
         extends SelectAdapter<VDB, D, VH> {
     protected List<D> mSelecteds;//已选列表
 
+
     public SelectPlusAdapter(List<D> selecteds) {
         if (selecteds == null) mSelecteds = new LinkedList<>();
         else mSelecteds = selecteds;
