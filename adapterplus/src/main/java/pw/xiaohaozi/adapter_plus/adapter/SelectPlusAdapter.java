@@ -28,9 +28,9 @@ import pw.xiaohaozi.adapter_plus.holder.SelectHolder;
  */
 public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends SelectData, VH extends SelectHolder<VDB>>
         extends SelectAdapter<VDB, D, VH> {
-    private LinkedList<D> mSelecteds;//已选列表
+    protected List<D> mSelecteds;//已选列表
 
-    public SelectPlusAdapter(LinkedList<D> selecteds) {
+    public SelectPlusAdapter(List<D> selecteds) {
         if (selecteds == null) mSelecteds = new LinkedList<>();
         else mSelecteds = selecteds;
     }
@@ -148,7 +148,7 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
      *
      * @return
      */
-    public LinkedList<D> getSelecteds() {
+    public List<D> getSelecteds() {
         return mSelecteds;
     }
 
@@ -174,7 +174,7 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
             //如果选择个数最大可选个数，则移除选中的第一个
             if (mMaxSelectSize <= mSelecteds.size()) {
                 if (isAutoRemove) {
-                    D first = mSelecteds.removeFirst();
+                    D first = mSelecteds.remove(mSelecteds.size() - 1);
                     first.setSelected___(false);
                     int indexOf = getDataList().indexOf(first);
                     notifyItemChanged(indexOf);

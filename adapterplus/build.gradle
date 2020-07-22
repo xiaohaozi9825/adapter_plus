@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 29
-        versionCode 20000//可以把中间的0看成小数点
-        versionName "2.000"
+        versionCode 20001//可以把中间的0看成小数点
+        versionName "2.001"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -38,6 +38,7 @@ android {
 //    include('classes.jar')
 //    rename('classes.jar', 'smallAppJar.jar') //命名为network.jar
 //}
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
