@@ -2,6 +2,7 @@ package pw.xiaohaozi.adapter_plus.adapter;
 
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ import pw.xiaohaozi.adapter_plus.holder.SelectHolder;
  */
 public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends SelectData, VH extends SelectHolder<VDB>>
         extends SelectAdapter<VDB, D, VH> {
-    protected List<D> mSelecteds;//已选列表
+    protected ArrayListList<D> mSelecteds;//已选列表
 
 
     public SelectPlusAdapter(List<D> selecteds) {
