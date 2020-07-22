@@ -1,22 +1,22 @@
 package pw.xiaohaozi.adapter_plus.adapter;
 
-import android.view.ViewGroup;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
 import pw.xiaohaozi.adapter_plus.holder.SelectHolder;
 
-
-public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends SelectHolder<VDB>> extends SingleTypeAdapter<VDB, D, VH> {
-    private LinkedList<Integer> mSelectPosition = new LinkedList<>();
-    private int mMaxSelectSize = Integer.MAX_VALUE;//最多可以选中几个
-    private boolean isAutoRemove = true;//当超出选中个数后是否自动删除最先选中的
-    private boolean isNoCancel = false;//是否禁止取消,当再次点击被选中的目标是，不执行任何操作
-    private Warning mAutoRemoveWarning;
-    private OnSelectChange<D> mOnSelectChange;
+/**
+ * 描述：
+ * 作者：小耗子
+ * 简书地址：https://www.jianshu.com/u/2a2ea7b43087
+ * github：https://github.com/xiaohaozi9825
+ * 创建时间：2020/7/22 0022 10:31
+ */
+public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends SelectHolder<VDB>>
+        extends SingleTypeAdapter<VDB, D, VH> {
+    OnSelectChange<D> mOnSelectChange;
+    int mMaxSelectSize = Integer.MAX_VALUE;//最多可以选中几个
+    Warning mAutoRemoveWarning;
+    boolean isAutoRemove = true;//当超出选中个数后是否自动删除最先选中的
+    boolean isNoCancel = false;//是否禁止取消,当再次点击被选中的目标是，不执行任何操作
 
     /**
      * 最多可以选择多少项
@@ -27,10 +27,11 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
      * @param maxSelectSize
      * @return
      */
-    public SelectAdapter setMaxSelectSize(int maxSelectSize) {
+    public <S extends SelectAdapter> S setMaxSelectSize(int maxSelectSize) {
         mMaxSelectSize = maxSelectSize;
-        return this;
+        return (S) this;
     }
+
 
     /**
      * 当选择个数大于 mMaxSelectSize 时，是否自动取消第一个选中的item
@@ -40,68 +41,49 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
      *                   会回调warning.warn()方法。
      * @return
      */
-    public SelectAdapter setAutoRemove(boolean autoRemove, Warning warning) {
+    public <S extends SelectAdapter> S setAutoRemove(boolean autoRemove, SelectAdapter.Warning warning) {
         isAutoRemove = autoRemove;
         mAutoRemoveWarning = warning;
-        return this;
+        return (S) this;
     }
 
     /**
      * 增加一条选中的item
      *
-     * @param position
-     * @return
+     * @param d
+     * @return //
      */
-    public SelectAdapter addSelectItem(Integer position) {
-        if (mSelectPosition.contains(position)) return this;//如果已经是选中状态，不操作
-        mSelectPosition.add(position);
-        if (getDataList() != null && getDataList().size() > position) {
-            notifyItemChanged(position);
-            onSelectChange(position, true);
-        }
-        return this;
-    }
+    public abstract <S extends SelectAdapter> S addSelectItem(D d);
 
     /**
      * 取消选中状态
      *
-     * @param position
+     * @param d
      * @return
      */
-    public SelectAdapter cancelSelectItem(Integer position) {
-        if (!mSelectPosition.contains(position)) return this;//如果已经是未选中状态，不操作
-        mSelectPosition.remove(position);
-        if (getDataList() != null && getDataList().size() > position) {
-            notifyItemChanged(position);
-            onSelectChange(position, false);
-        }
-        return this;
-    }
+    public abstract <S extends SelectAdapter> S cancelSelectItem(D d);
+
 
     /**
      * 全选
      *
      * @return
      */
-    public SelectAdapter selectAll() {
-        mSelectPosition.clear();
-        for (int i = 0; i < getDataList().size(); i++) {
-            mSelectPosition.add(i);
-        }
-        notifyDataSetChanged();
-        return this;
-    }
+    public abstract <S extends SelectAdapter> S selectAll();
 
     /**
      * 全不选
      *
      * @return
      */
-    public SelectAdapter cancelAll() {
-        mSelectPosition.clear();
-        notifyDataSetChanged();
-        return this;
-    }
+    public abstract <S extends SelectAdapter> S cancelAll();
+
+    /**
+     * 反选
+     *
+     * @return
+     */
+    public abstract <S extends SelectAdapter> S invertSelect();
 
     /**
      * 是否允许取消已选状态
@@ -111,112 +93,12 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
      * @param noCancel 默认false
      * @return
      */
-    public SelectAdapter setNoCancel(boolean noCancel) {
+    public <S extends SelectAdapter> S setNoCancel(boolean noCancel) {
         isNoCancel = noCancel;
-        return this;
-    }
-
-    /**
-     * 获取被选中的item索引
-     *
-     * @return
-     */
-    public LinkedList<Integer> getSelectPosition() {
-        return mSelectPosition;
-    }
-
-    @Override
-    public boolean refresh(List<D> list) {
-        mSelectPosition.clear();
-        return super.refresh(list);
-    }
-
-    @Override
-    protected <VG extends ViewGroup> VH onCreateViewHolder(@NonNull VG vg, VDB vdb, int viewType) {
-        final VH vh = super.onCreateViewHolder(vg, vdb, viewType);
-        vh.setOnSelectChangeListener((selectHolder, position) -> {
-            //先判断该item是否已经被选中了，如果是，则取消选择
-            if (mSelectPosition.contains(position)) {
-                if (isNoCancel) return;//如果禁止取消，则不执行任何操作
-                mSelectPosition.remove(position);
-                notifyItemChanged(position);
-                onSelectChange(position, false);
-                return;
-            }
-            if (mMaxSelectSize <= mSelectPosition.size()) {
-                if (isAutoRemove) {
-                    Integer first = mSelectPosition.removeFirst();
-                    notifyItemChanged(first);
-                    onSelectChange(first, false);
-                } else {
-                    if (mAutoRemoveWarning != null)
-                        mAutoRemoveWarning.warn("您最多只能选中" + mMaxSelectSize + "条");
-                    return;
-                }
-            }
-            mSelectPosition.add(position);
-            notifyItemChanged(position);
-            onSelectChange(position, true);
-        });
-//        vh.setOnItemClickListener(vdb -> {
-//            Integer selectPosition = vh.getLayoutPosition();
-//            //先判断该item是否已经被选中了，如果是，则取消选择
-//            if (mSelectPosition.contains(selectPosition)) {
-//                if (isNoCancel) return;//如果禁止取消，则不执行任何操作
-//                mSelectPosition.remove(selectPosition);
-//                notifyItemChanged(selectPosition);
-//                onSelectChange(selectPosition, false);
-//                return;
-//            }
-//            if (mMaxSelectSize <= mSelectPosition.size()) {
-//                if (isAutoRemove) {
-//                    Integer first = mSelectPosition.removeFirst();
-//                    notifyItemChanged(first);
-//                    onSelectChange(first, false);
-//                } else {
-//                    if (mAutoRemoveWarning != null)
-//                        mAutoRemoveWarning.warn("您最多只能选中" + mMaxSelectSize + "条");
-//                    return;
-//                }
-//            }
-//            mSelectPosition.add(selectPosition);
-//            notifyItemChanged(selectPosition);
-//            onSelectChange(selectPosition, true);
-//        });
-        return vh;
-    }
-
-    @Override
-    protected void onBindViewHolder(VH vh, int position, VDB vdb, D d) {
-        boolean isSelect = mSelectPosition.contains(position);
-        onBindViewHolder(vh, position, vdb, d, isSelect);
+        return (S) this;
     }
 
 
-    /**
-     * 当选中状态发生改变时会回调该方法
-     *
-     * @param position 被改变的索引
-     * @param isSelect 是否被选中
-     */
-    private void onSelectChange(int position, boolean isSelect) {
-        if (mOnSelectChange != null) {
-            mOnSelectChange.onSelectChange(position, isSelect, getDataList().get(position));
-        }
-    }
-
-    /**
-     * 绑定数据到view中
-     * <p>
-     * 该方法在选中状态改变时也会被调用
-     *
-     * @param vh
-     * @param position
-     * @param vdb
-     * @param d
-     * @param isSelect
-     */
-    protected abstract void onBindViewHolder(VH vh, int position, VDB vdb, D d, boolean isSelect);
 
     /**
      * 警告：当选择数超过最大数，而且不自动取消旧的被选中的item时，会触发该警告
@@ -240,6 +122,19 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
      * @param <D>
      */
     public interface OnSelectChange<D> {
+        /**
+         * 选中状态改变
+         *
+         * @param position    发生改变的索引
+         * @param isSelect    改变后的状态
+         * @param d           被改变的数据
+         */
         void onSelectChange(int position, boolean isSelect, D d);
+
+        /**
+         * 是否全选，全选和反选，还有全不选调用
+         * @param isSelectAll
+         */
+        void onSelectAll( boolean isSelectAll);
     }
 }

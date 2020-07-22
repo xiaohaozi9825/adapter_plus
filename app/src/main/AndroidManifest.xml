@@ -14,7 +14,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MultiTypeActivity"></activity>
+        <activity android:name=".SelectPlusActivity"></activity>
+        <activity android:name=".MultiTypeActivity" />
         <activity android:name=".SimpleActivity" />
         <activity android:name=".SingleTypeActivity" />
         <activity android:name=".SelectImageActivity" />

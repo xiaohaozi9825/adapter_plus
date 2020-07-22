@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.iflytek.myapplication.adapter.ImageSelectAdapter;
+import com.iflytek.myapplication.adapter.ImageSelectSimpleAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.ObservableArrayList;
@@ -14,7 +14,7 @@ import pw.xiaohaozi.adapter_plus.adapter.SelectAdapter;
 
 public class SelectImageActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
-    private ImageSelectAdapter mImageSelectAdapter;
+    private ImageSelectSimpleAdapter mImageSelectAdapter;
     private ObservableArrayList<String> mObservableArrayList;
     final private static int SPAN_COUNT = 4;
 
@@ -25,15 +25,23 @@ public class SelectImageActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, SPAN_COUNT, RecyclerView.VERTICAL, false));
         mRecyclerView.post(() -> {
-            mImageSelectAdapter = new ImageSelectAdapter(SPAN_COUNT);
+            mImageSelectAdapter = new ImageSelectSimpleAdapter(SPAN_COUNT);
             mImageSelectAdapter.setOnItemClickListener((v, itemSelectImageBinding, position) -> {
                 Toast.makeText(getApplicationContext(), "点击查看大图", Toast.LENGTH_SHORT).show();
             });
-            mImageSelectAdapter.setOnSelectChange((position, isSelect, s) -> {
-                if (isSelect) {
-                    Log.i("选择", "onSelectChange: +++ " + position);
-                } else {
-                    Log.i("选择", "onSelectChange: --- " + position);
+            mImageSelectAdapter.setOnSelectChange(new SelectAdapter.OnSelectChange<String>() {
+                @Override
+                public void onSelectChange(int position, boolean isSelect, String s) {
+                    if (isSelect) {
+                        Log.i("选择", "onSelectChange: +++ " + position);
+                    } else {
+                        Log.i("选择", "onSelectChange: --- " + position);
+                    }
+                }
+
+                @Override
+                public void onSelectAll(boolean isSelectAll) {
+
                 }
             });
             mRecyclerView.setAdapter(mImageSelectAdapter);

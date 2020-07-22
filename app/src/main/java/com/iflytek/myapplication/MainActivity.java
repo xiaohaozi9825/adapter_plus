@@ -12,6 +12,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mBtnSingleType;
     private Button mBtnMultiType;
     private Button mBtnSelect;
+    private Button mBtnSelectPlus;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,11 +24,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnSingleType = findViewById(R.id.btn_single_type);
         mBtnMultiType = findViewById(R.id.btn_multi_type);
         mBtnSelect = findViewById(R.id.btn_select);
+        mBtnSelectPlus = findViewById(R.id.btn_select_plus);
 
         mBtnSimple.setOnClickListener(this);
         mBtnSingleType.setOnClickListener(this);
         mBtnMultiType.setOnClickListener(this);
         mBtnSelect.setOnClickListener(this);
+        mBtnSelectPlus.setOnClickListener(this);
     }
 
     @Override
@@ -43,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_select:
                 startActivity(new Intent(this, SelectImageActivity.class));
+                break;
+            case R.id.btn_select_plus:
+                startActivity(new Intent(this, SelectPlusActivity.class));
                 break;
 
             default:

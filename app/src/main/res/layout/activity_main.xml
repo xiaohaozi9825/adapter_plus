@@ -35,4 +35,11 @@
         android:layout_margin="16dp"
         android:text="单选多选" />
 
+    <Button
+        android:id="@+id/btn_select_plus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="加强版选择器" />
+
 </LinearLayout>
