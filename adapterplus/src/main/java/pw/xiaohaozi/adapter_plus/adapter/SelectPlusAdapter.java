@@ -29,10 +29,10 @@ import pw.xiaohaozi.adapter_plus.holder.SelectHolder;
  */
 public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends SelectData, VH extends SelectHolder<VDB>>
         extends SelectAdapter<VDB, D, VH> {
-    protected LinkedList<D> mSelecteds;//已选列表 2020-7-22 15:38:29
+    protected List<D> mSelecteds;//已选列表 2020-7-22 15:38:29
 
 
-    public SelectPlusAdapter(LinkedList<D> selecteds) {
+    public SelectPlusAdapter(List<D> selecteds) {
         if (selecteds == null) mSelecteds = new LinkedList<>();
         else mSelecteds = selecteds;
     }
