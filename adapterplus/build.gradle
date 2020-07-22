@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 29
-        versionCode 20001//可以把中间的0看成小数点
-        versionName "2.001"
+        versionCode 20002//可以把中间的0看成小数点
+        versionName "2.002"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
