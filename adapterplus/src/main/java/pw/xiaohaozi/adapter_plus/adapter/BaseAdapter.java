@@ -161,9 +161,8 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      *
      * @param listener
      */
-    public <A extends BaseAdapter> A setOnItemClickListener(OnItemClickListener<VDB> listener) {
+    public void setOnItemClickListener(OnItemClickListener<VDB> listener) {
         mOnItemClickListener = listener;
-        return (A) this;
     }
 
     /**
@@ -172,19 +171,16 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      *
      * @param listener
      */
-    public <A extends BaseAdapter> A setOnClickListener(OnClickListener<VDB> listener) {
+    public void setOnClickListener(OnClickListener<VDB> listener) {
         mOnClickListener = listener;
-        return (A) this;
     }
 
-    public <A extends BaseAdapter> A setOnItemLongClickListener(OnItemLongClickListener<VDB> onItemLongClickListener) {
+    public void setOnItemLongClickListener(OnItemLongClickListener<VDB> onItemLongClickListener) {
         mOnItemLongClickListener = onItemLongClickListener;
-        return (A) this;
     }
 
-    public <A extends BaseAdapter> A setOnLongClickListener(OnLongClickListener<VDB> onLongClickListener) {
+    public void setOnLongClickListener(OnLongClickListener<VDB> onLongClickListener) {
         mOnLongClickListener = onLongClickListener;
-        return (A) this;
     }
 
     public List<D> getDataList() {
