@@ -12,7 +12,7 @@ import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
  */
 public abstract class MultiTypeAdapter extends BaseAdapter<ViewDataBinding, RecyclerData, ViewHolder<ViewDataBinding>> {
     @Override
-    protected <VG extends ViewGroup> ViewHolder<ViewDataBinding> onCreateViewHolder(@NonNull VG parent,@NonNull  ViewDataBinding binding, int viewType) {
+    protected <VG extends ViewGroup> ViewHolder<ViewDataBinding> onCreateViewHolder(@NonNull VG parent, @NonNull ViewDataBinding binding, int viewType) {
         return new ViewHolder<>(binding);
     }
 }

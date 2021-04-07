@@ -3,12 +3,12 @@ apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.xiaohaozi9825'
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.0"
+    buildToolsVersion "30.0.2"
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 30
-        versionCode 20003//可以把中间的0看成小数点
-        versionName "2.003"
+        versionCode 3_00_00//可以把中间的0看成小数点
+        versionName "3.00.00"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'

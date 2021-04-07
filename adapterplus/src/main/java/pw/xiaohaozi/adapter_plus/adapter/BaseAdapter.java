@@ -26,7 +26,7 @@ import pw.xiaohaozi.adapter_plus.listener.OnLongClickListener;
  * @param <D>
  * @param <VH>
  */
-public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends ViewHolder<VDB>> extends RecyclerView.Adapter {
+public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends ViewHolder<VDB>> extends RecyclerView.Adapter<VH> {
     private List<D> mDataList;
     protected Context mContext;
     private OnItemClickListener mOnItemClickListener;
@@ -187,7 +187,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
 
     @NonNull
     @Override
-    final public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    final public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         mContext = parent.getContext();
         VDB binding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
@@ -204,8 +204,8 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
 
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-        onBindViewHolder((VH) viewHolder, position, ((VH) viewHolder).getBinding(), mDataList.get(position));
+    public void onBindViewHolder(@NonNull VH viewHolder, int position) {
+        onBindViewHolder(viewHolder, position, viewHolder.getBinding(), mDataList.get(position));
     }
 
     /**
