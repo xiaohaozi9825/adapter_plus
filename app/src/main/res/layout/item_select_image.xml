@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="url"
             type="String" />
@@ -19,13 +20,14 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ImageView
                 src="@{url}"
                 android:layout_width="match_parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="0dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_height="0dp" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <View
                 android:id="@+id/view_select"

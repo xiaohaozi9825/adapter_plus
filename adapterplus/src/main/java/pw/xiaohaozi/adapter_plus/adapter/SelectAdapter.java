@@ -27,9 +27,8 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
      * @param maxSelectSize
      * @return
      */
-    public <S extends SelectAdapter> S setMaxSelectSize(int maxSelectSize) {
+    public void setMaxSelectSize(int maxSelectSize) {
         mMaxSelectSize = maxSelectSize;
-        return (S) this;
     }
 
 
@@ -41,10 +40,9 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
      *                   会回调warning.warn()方法。
      * @return
      */
-    public <S extends SelectAdapter> S setAutoRemove(boolean autoRemove, SelectAdapter.Warning warning) {
+    public void setAutoRemove(boolean autoRemove, SelectAdapter.Warning warning) {
         isAutoRemove = autoRemove;
         mAutoRemoveWarning = warning;
-        return (S) this;
     }
 
     /**
@@ -53,7 +51,7 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
      * @param d
      * @return //
      */
-    public abstract <S extends SelectAdapter> S addSelectItem(D d);
+    public abstract void addSelectItem(D d);
 
     /**
      * 取消选中状态
@@ -61,7 +59,7 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
      * @param d
      * @return
      */
-    public abstract <S extends SelectAdapter> S cancelSelectItem(D d);
+    public abstract void cancelSelectItem(D d);
 
 
     /**
@@ -69,21 +67,21 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
      *
      * @return
      */
-    public abstract <S extends SelectAdapter> S selectAll();
+    public abstract void selectAll();
 
     /**
      * 全不选
      *
      * @return
      */
-    public abstract <S extends SelectAdapter> S cancelAll();
+    public abstract void cancelAll();
 
     /**
      * 反选
      *
      * @return
      */
-    public abstract <S extends SelectAdapter> S invertSelect();
+    public abstract void invertSelect();
 
     /**
      * 是否允许取消已选状态
@@ -93,9 +91,8 @@ public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends S
      * @param noCancel 默认false
      * @return
      */
-    public <S extends SelectAdapter> S setNoCancel(boolean noCancel) {
+    public void setNoCancel(boolean noCancel) {
         isNoCancel = noCancel;
-        return (S) this;
     }
 
 

@@ -45,9 +45,9 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
      * @return
      */
     @Override
-    public <S extends SelectAdapter> S addSelectItem(D d) {
-        if (d == null) return (S) this;
-        if (d.isSelected___()) return (S) this;//如果已经是选中状态，不操作
+    public void  addSelectItem(D d) {
+        if (d == null) return ;
+        if (d.isSelected___()) return ;//如果已经是选中状态，不操作
 
         mSelecteds.add(d);
         d.setSelected___(true);
@@ -56,7 +56,6 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
             notifyItemChanged(position);
             onSelectChange(position, true);
         }
-        return (S) this;
     }
 
     /**
@@ -67,9 +66,9 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
      */
 
     @Override
-    public <S extends SelectAdapter> S cancelSelectItem(D d) {
-        if (d == null) return (S) this;
-        if (!d.isSelected___()) return (S) this;//如果已经是未选中状态，不操作
+    public void  cancelSelectItem(D d) {
+        if (d == null) return ;
+        if (!d.isSelected___()) return ;//如果已经是未选中状态，不操作
         mSelecteds.remove(d);
         d.setSelected___(false);
         if (getDataList() != null && getDataList().contains(d)) {
@@ -77,7 +76,6 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
             notifyItemChanged(position);
             onSelectChange(position, false);
         }
-        return (S) this;
     }
 
     /**
@@ -87,7 +85,7 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
      * @return
      */
     @Override
-    public <S extends SelectAdapter> S selectAll() {
+    public void  selectAll() {
         mSelecteds.clear();
         for (int i = 0; i < getDataList().size(); i++) {
             D d = getDataList().get(i);
@@ -100,7 +98,7 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
         }
         notifyDataSetChanged();
         if (mOnSelectChange != null) mOnSelectChange.onSelectAll(true);
-        return (S) this;
+
     }
 
     /**
@@ -109,13 +107,12 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
      * @return
      */
     @Override
-    public <S extends SelectAdapter> S cancelAll() {
+    public void  cancelAll() {
         for (D d : mSelecteds) d.setSelected___(false);
         mSelecteds.clear();
         notifyDataSetChanged();
         if (mOnSelectChange != null) mOnSelectChange.onSelectAll(false);
 
-        return (S) this;
     }
 
     /**
@@ -126,7 +123,7 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
      * @return
      */
     @Override
-    public <S extends SelectAdapter> S invertSelect() {
+    public void  invertSelect() {
         mSelecteds.clear();
         for (int i = 0; i < getDataList().size(); i++) {
             D d = getDataList().get(i);
@@ -142,7 +139,6 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
             mOnSelectChange.onSelectAll(mSelecteds.size() == getDataList().size());
 
         notifyDataSetChanged();
-        return (S) this;
     }
 
     /**
@@ -155,7 +151,7 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
     }
 
     @Override
-    public boolean refresh(List<D> list) {
+    public <A extends List<D>> boolean refresh(A list) {
         return super.refresh(list);
     }
 

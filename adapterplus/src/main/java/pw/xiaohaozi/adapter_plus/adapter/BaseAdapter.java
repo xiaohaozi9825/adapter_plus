@@ -42,7 +42,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      * @param list
      */
     @Deprecated
-    public boolean add(List<D> list) {
+    public <A extends List<D>> boolean add(A list) {
         if (mDataList == null) {
             return refresh(list);
         } else {
@@ -75,8 +75,6 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
                 if (add) notifyItemInserted(mDataList.size() - 1);
                 return add;
             }
-
-
         }
     }
 
@@ -146,7 +144,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      *
      * @param list
      */
-    public boolean refresh(List<D> list) {
+    public <A extends List<D>> boolean refresh(A list) {
         if (list == null) return false;
         mDataList = list;
         if (mDataList instanceof ObservableList) {
@@ -218,9 +216,9 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      * @param viewType
      * @return
      */
-    protected abstract <VG extends ViewGroup> VH onCreateViewHolder(@NonNull VG parent, VDB binding, int viewType);
+    protected abstract <VG extends ViewGroup> VH onCreateViewHolder(@NonNull VG parent, @NonNull VDB binding, @NonNull int viewType);
 
-    protected abstract void onBindViewHolder(VH vh, int position, VDB vdb, D d);
+    protected abstract void onBindViewHolder(@NonNull VH vh, @NonNull int position,@NonNull  VDB vdb,@NonNull  D d);
 
     protected abstract int getLayoutRes(int viewType);
 
