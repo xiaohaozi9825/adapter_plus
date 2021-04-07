@@ -21,11 +21,11 @@ public abstract class SelectSimpleAdapter<VDB extends ViewDataBinding, D, VH ext
      * @return
      */
     @Override
-    public void  addSelectItem(D d) {
-        if (d == null) return  ;
+    public void addSelectItem(D d) {
+        if (d == null) return;
         int position = getDataList().indexOf(d);
-        if (position < 0) return  ;
-        if (mSelectPosition.contains(position)) return  ;//如果已经是选中状态，不操作
+        if (position < 0) return;
+        if (mSelectPosition.contains(position)) return;//如果已经是选中状态，不操作
         mSelectPosition.add(position);
         if (getDataList() != null && getDataList().size() > position) {
             notifyItemChanged(position);
@@ -41,21 +41,21 @@ public abstract class SelectSimpleAdapter<VDB extends ViewDataBinding, D, VH ext
      * @return
      */
     @Override
-    public void  cancelSelectItem(D d) {
-        if (d == null) return  ;
+    public void cancelSelectItem(D d) {
+        if (d == null) return;
         int position = getDataList().indexOf(d);
-        if (position < 0) return  ;
-        if (!mSelectPosition.contains(position)) return  ;//如果已经是未选中状态，不操作
+        if (position < 0) return;
+        if (!mSelectPosition.contains(position)) return;//如果已经是未选中状态，不操作
         mSelectPosition.remove(position);
         if (getDataList() != null && getDataList().size() > position) {
             notifyItemChanged(position);
             onSelectChange(position, false);
         }
-        return  ;
+        return;
     }
 
     @Override
-    public void  invertSelect() {
+    public void invertSelect() {
         LinkedList<Integer> temp = (LinkedList<Integer>) mSelectPosition.clone();
         mSelectPosition.clear();
         for (int i = 0; i < getDataList().size(); i++)
@@ -69,7 +69,7 @@ public abstract class SelectSimpleAdapter<VDB extends ViewDataBinding, D, VH ext
      * @return
      */
     @Override
-    public void  selectAll() {
+    public void selectAll() {
         mSelectPosition.clear();
         for (int i = 0; i < getDataList().size(); i++) {
             mSelectPosition.add(i);
@@ -83,7 +83,7 @@ public abstract class SelectSimpleAdapter<VDB extends ViewDataBinding, D, VH ext
      * @return
      */
     @Override
-    public void  cancelAll() {
+    public void cancelAll() {
         mSelectPosition.clear();
         notifyDataSetChanged();
     }
@@ -160,7 +160,7 @@ public abstract class SelectSimpleAdapter<VDB extends ViewDataBinding, D, VH ext
     }
 
     @Override
-    protected void onBindViewHolder(VH vh, int position, VDB vdb, D d) {
+    protected void onBindViewHolder(@NonNull VH vh, int position,@NonNull  VDB vdb, @NonNull D d) {
         boolean isSelect = mSelectPosition.contains(position);
         onBindViewHolder(vh, position, vdb, d, isSelect);
     }
@@ -190,7 +190,7 @@ public abstract class SelectSimpleAdapter<VDB extends ViewDataBinding, D, VH ext
      * @param d
      * @param isSelect
      */
-    protected abstract void onBindViewHolder(VH vh, int position, VDB vdb, D d, boolean isSelect);
+    protected abstract void onBindViewHolder(@NonNull VH vh, int position,@NonNull  VDB vdb, @NonNull D d, boolean isSelect);
 
 
 }

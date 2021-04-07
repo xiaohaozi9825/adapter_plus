@@ -25,7 +25,7 @@ public abstract class SimpleAdapter<VDB extends ViewDataBinding, D> extends Sing
      * @return
      */
     @Override
-    protected <VG extends ViewGroup>ViewHolder<VDB> onCreateViewHolder(@NonNull VG vg, VDB vdb, int viewType) {
+    protected <VG extends ViewGroup>ViewHolder<VDB> onCreateViewHolder(@NonNull VG vg,@NonNull  VDB vdb, int viewType) {
         return new ViewHolder<>(vdb);
     }
 }

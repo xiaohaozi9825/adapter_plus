@@ -213,7 +213,7 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
      * @param d
      * @param isSelect
      */
-    protected abstract void onBindViewHolder(VH vh, int position, VDB vdb, D d, boolean isSelect);
+    protected abstract void onBindViewHolder(@NonNull VH vh, int position, @NonNull VDB vdb,@NonNull  D d, boolean isSelect);
 
     /**
      * 当选中状态发生改变时会回调该方法
