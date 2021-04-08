@@ -1,6 +1,6 @@
 package pw.xiaohaozi.adapter_plus.adapter;
 
-public interface SelectData {
+public interface Check {
     /**
      * 是否选择
      *

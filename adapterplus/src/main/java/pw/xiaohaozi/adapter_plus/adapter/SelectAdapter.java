@@ -11,7 +11,7 @@ import pw.xiaohaozi.adapter_plus.holder.SelectHolder;
  * 创建时间：2020/7/22 0022 10:31
  */
 public abstract class SelectAdapter<VDB extends ViewDataBinding, D, VH extends SelectHolder<VDB>>
-        extends SingleTypeAdapter<VDB, D, VH> {
+        extends BaseAdapter<VDB, D, VH> {
     OnSelectChange<D> mOnSelectChange;
     int mMaxSelectSize = Integer.MAX_VALUE;//最多可以选中几个
     Warning mAutoRemoveWarning;

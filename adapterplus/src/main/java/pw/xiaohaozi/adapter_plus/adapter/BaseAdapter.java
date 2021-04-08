@@ -2,6 +2,7 @@ package pw.xiaohaozi.adapter_plus.adapter;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -205,6 +206,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
 
     @Override
     public void onBindViewHolder(@NonNull VH viewHolder, int position) {
+        Log.i("测试泛型", "onBindViewHolder: " + (mDataList.get(position) instanceof Check));
         onBindViewHolder(viewHolder, position, viewHolder.getBinding(), mDataList.get(position));
     }
 
@@ -216,9 +218,9 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      * @param viewType
      * @return
      */
-    protected abstract <VG extends ViewGroup> VH onCreateViewHolder(@NonNull VG parent, @NonNull VDB binding, @NonNull int viewType);
+    protected abstract <VG extends ViewGroup> VH onCreateViewHolder(@NonNull VG parent, @NonNull VDB binding, int viewType);
 
-    protected abstract void onBindViewHolder(@NonNull VH vh, @NonNull int position,@NonNull  VDB vdb,@NonNull  D d);
+    protected abstract void onBindViewHolder(@NonNull VH vh, int position, @NonNull VDB vdb, @NonNull D d);
 
     protected abstract int getLayoutRes(int viewType);
 

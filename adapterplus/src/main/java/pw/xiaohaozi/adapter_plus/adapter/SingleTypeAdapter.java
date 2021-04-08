@@ -6,11 +6,13 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
+import pw.xiaohaozi.adapter_plus.holder.SelectHolder;
 import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
 
 /**
@@ -26,7 +28,9 @@ import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
  * @param <D>
  * @param <VH>
  */
-public abstract class SingleTypeAdapter<VDB extends ViewDataBinding, D, VH extends ViewHolder<VDB>> extends BaseAdapter<VDB, D, VH> {
+public abstract class SingleTypeAdapter<VDB extends ViewDataBinding, D, VH extends SelectHolder<VDB>> extends SelectPlusAdapter<VDB, D, VH> {
+
+
 
     /**
      * 当viewType只有一种类型时，我们是可以直接确定layout id的值的

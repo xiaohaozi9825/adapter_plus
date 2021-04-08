@@ -2,7 +2,6 @@ package pw.xiaohaozi.adapter_plus.adapter;
 
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,14 +26,18 @@ import pw.xiaohaozi.adapter_plus.holder.SelectHolder;
  * github：https://github.com/xiaohaozi9825
  * 创建时间：2020/7/21 0021
  */
-public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends SelectData, VH extends SelectHolder<VDB>>
+public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D, VH extends SelectHolder<VDB>>
         extends SelectAdapter<VDB, D, VH> {
-    protected List<D> mSelecteds;//已选列表 2020-7-22 15:38:29
+    protected List<Check> mChecks;//已选列表 2020-7-22 15:38:29
 
 
-    public SelectPlusAdapter(List<D> selecteds) {
-        if (selecteds == null) mSelecteds = new LinkedList<>();
-        else mSelecteds = selecteds;
+    public SelectPlusAdapter(List<Check> checks) {
+        if (checks == null) mChecks = new LinkedList<>();
+        else mChecks = checks;
+    }
+
+    public SelectPlusAdapter() {
+
     }
 
 
@@ -45,12 +48,13 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
      * @return
      */
     @Override
-    public void  addSelectItem(D d) {
-        if (d == null) return ;
-        if (d.isSelected___()) return ;//如果已经是选中状态，不操作
-
-        mSelecteds.add(d);
-        d.setSelected___(true);
+    public void addSelectItem(D d) {
+        if (d == null) return;
+        if (!(d instanceof Check)) return;
+        Check sd = (Check) d;
+        if (sd.isSelected___()) return;//如果已经是选中状态，不操作
+        mChecks.add(sd);
+        sd.setSelected___(true);
         if (getDataList() != null && getDataList().contains(d)) {
             int position = getDataList().indexOf(d);
             notifyItemChanged(position);
@@ -66,11 +70,13 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
      */
 
     @Override
-    public void  cancelSelectItem(D d) {
-        if (d == null) return ;
-        if (!d.isSelected___()) return ;//如果已经是未选中状态，不操作
-        mSelecteds.remove(d);
-        d.setSelected___(false);
+    public void cancelSelectItem(D d) {
+        if (d == null) return;
+        if (!(d instanceof Check)) return;
+        Check sd = (Check) d;
+        if (!sd.isSelected___()) return;//如果已经是未选中状态，不操作
+        mChecks.remove(sd);
+        sd.setSelected___(false);
         if (getDataList() != null && getDataList().contains(d)) {
             int position = getDataList().indexOf(d);
             notifyItemChanged(position);
@@ -85,15 +91,17 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
      * @return
      */
     @Override
-    public void  selectAll() {
-        mSelecteds.clear();
+    public void selectAll() {
+        mChecks.clear();
         for (int i = 0; i < getDataList().size(); i++) {
             D d = getDataList().get(i);
-            if (mSelecteds.size() < mMaxSelectSize) {
-                mSelecteds.add(d);
-                d.setSelected___(true);
+            if (!(d instanceof Check)) return;
+            Check sd = (Check) d;
+            if (mChecks.size() < mMaxSelectSize) {
+                mChecks.add(sd);
+                sd.setSelected___(true);
             } else {
-                d.setSelected___(false);
+                sd.setSelected___(false);
             }
         }
         notifyDataSetChanged();
@@ -107,9 +115,13 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
      * @return
      */
     @Override
-    public void  cancelAll() {
-        for (D d : mSelecteds) d.setSelected___(false);
-        mSelecteds.clear();
+    public void cancelAll() {
+
+        for (Check d : mChecks) {
+            if (d == null) continue;
+            d.setSelected___(false);
+        }
+        mChecks.clear();
         notifyDataSetChanged();
         if (mOnSelectChange != null) mOnSelectChange.onSelectAll(false);
 
@@ -123,20 +135,22 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
      * @return
      */
     @Override
-    public void  invertSelect() {
-        mSelecteds.clear();
+    public void invertSelect() {
+        mChecks.clear();
         for (int i = 0; i < getDataList().size(); i++) {
             D d = getDataList().get(i);
-            boolean selected___ = d.isSelected___();
-            if (mSelecteds.size() < mMaxSelectSize) {
-                if (!selected___) mSelecteds.add(d);
-                d.setSelected___(!selected___);
+            if (!(d instanceof Check)) return;
+            Check sd = (Check) d;
+            boolean selected___ = sd.isSelected___();
+            if (mChecks.size() < mMaxSelectSize) {
+                if (!selected___) mChecks.add(sd);
+                sd.setSelected___(!selected___);
             } else {
-                d.setSelected___(false);
+                sd.setSelected___(false);
             }
         }
         if (mOnSelectChange != null)
-            mOnSelectChange.onSelectAll(mSelecteds.size() == getDataList().size());
+            mOnSelectChange.onSelectAll(mChecks.size() == getDataList().size());
 
         notifyDataSetChanged();
     }
@@ -146,8 +160,8 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
      *
      * @return
      */
-    public List<D> getSelecteds() {
-        return mSelecteds;
+    public List<Check> getChecks() {
+        return mChecks;
     }
 
     @Override
@@ -156,23 +170,26 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
     }
 
     @Override
-    protected <VG extends ViewGroup> VH onCreateViewHolder(@NonNull VG vg, VDB vdb, int viewType) {
-        final VH vh = super.onCreateViewHolder(vg, vdb, viewType);
+    protected <VG extends ViewGroup> VH onCreateViewHolder(@NonNull VG vg, @NonNull VDB vdb, int viewType) {
+        final VH vh = createViewHolder(vg, vdb, viewType);
         vh.setOnSelectChangeListener((selectHolder, position) -> {
             D d = getDataList().get(position);
+            if (!(d instanceof Check)) return;
+            Check sd = (Check) d;
             //先判断该item是否已经被选中了，如果是，则取消选择
-            if (d.isSelected___()) {
+            if (sd.isSelected___()) {
                 if (isNoCancel) return;//如果禁止取消，则不执行任何操作
-                mSelecteds.remove(d);
-                d.setSelected___(false);
+                mChecks.remove(d);
+                sd.setSelected___(false);
                 notifyItemChanged(position);
                 onSelectChange(position, false);
                 return;
             }
             //如果选择个数最大可选个数，则移除选中的第一个
-            if (mMaxSelectSize <= mSelecteds.size()) {
+            if (mMaxSelectSize <= mChecks.size()) {
                 if (isAutoRemove) {
-                    D first = mSelecteds.remove(mSelecteds.size() - 1);
+                    Check first = mChecks.remove(mChecks.size() - 1);
+
                     first.setSelected___(false);
                     int indexOf = getDataList().indexOf(first);
                     notifyItemChanged(indexOf);
@@ -183,21 +200,25 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
                     return;
                 }
             }
-            mSelecteds.add(d);
-            d.setSelected___(true);
+            mChecks.add(sd);
+            sd.setSelected___(true);
             notifyItemChanged(position);
             onSelectChange(position, true);
         });
         return vh;
     }
 
+    protected abstract <VG extends ViewGroup> VH createViewHolder(@NonNull VG vg, @NonNull VDB vdb, int viewType);
+
     @Override
-    protected void onBindViewHolder(VH vh, int position, VDB vdb, D d) {
+    protected void onBindViewHolder(@NonNull VH vh, int position, @NonNull VDB vdb, @NonNull D d) {
         D d1 = getDataList().get(position);
         if (d1 == null) {
             onBindViewHolder(vh, position, vdb, d, false);
         } else {
-            onBindViewHolder(vh, position, vdb, d, d1.isSelected___());
+            if (!(d instanceof Check)) return;
+            Check sd = (Check) d;
+            onBindViewHolder(vh, position, vdb, d, sd.isSelected___());
         }
     }
 
@@ -213,7 +234,7 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
      * @param d
      * @param isSelect
      */
-    protected abstract void onBindViewHolder(@NonNull VH vh, int position, @NonNull VDB vdb,@NonNull  D d, boolean isSelect);
+    protected abstract void onBindViewHolder(@NonNull VH vh, int position, @NonNull VDB vdb, @NonNull D d, boolean isSelect);
 
     /**
      * 当选中状态发生改变时会回调该方法
@@ -224,7 +245,7 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D extends S
     protected void onSelectChange(int position, boolean isSelect) {
         if (mOnSelectChange != null) {
             mOnSelectChange.onSelectChange(position, isSelect, getDataList().get(position));
-            mOnSelectChange.onSelectAll(mSelecteds.size() == getDataList().size());
+            mOnSelectChange.onSelectAll(mChecks.size() == getDataList().size());
         }
     }
 

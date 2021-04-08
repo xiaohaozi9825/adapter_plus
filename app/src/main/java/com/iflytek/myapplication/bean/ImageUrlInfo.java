@@ -1,6 +1,6 @@
 package com.iflytek.myapplication.bean;
 
-import pw.xiaohaozi.adapter_plus.adapter.SelectData;
+import pw.xiaohaozi.adapter_plus.adapter.Check;
 
 /**
  * 描述：
@@ -9,7 +9,7 @@ import pw.xiaohaozi.adapter_plus.adapter.SelectData;
  * github：https://github.com/xiaohaozi9825
  * 创建时间：2020/7/21 0021 17:39
  */
-public class ImageUrlInfo implements SelectData {
+public class ImageUrlInfo implements Check {
     private boolean selected;
     private String usl;
 
