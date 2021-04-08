@@ -52,7 +52,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      * @param list
      */
     @Deprecated
-    public <A extends List<D>> boolean add(A list) {
+    public boolean add(List<? extends D> list) {
         if (mDatas == null) {
             return refresh(list);
         } else {
@@ -161,9 +161,10 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      *
      * @param list
      */
-    public <A extends List<D>> boolean refresh(A list) {
+    public boolean refresh(List<? extends D> list) {
         if (list == null) return false;
-        mDatas = list;
+        mDatas.clear();
+        mDatas.addAll(list);
         if (mDatas instanceof ObservableList) {
             ((ObservableList) mDatas).addOnListChangedCallback(new DynamicChangeCallback(this));
         }
@@ -219,12 +220,12 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         vh.setOnSelectChangeListener((ViewHolder, position) -> {
             D d = getDatas().get(position);
             if (!(d instanceof Check)) return;
-            Check sd = (Check) d;
+            Check check = (Check) d;
             //先判断该item是否已经被选中了，如果是，则取消选择
-            if (sd.checkIndex() >= 0) {
+            if (check.checkIndex() >= 0) {
                 if (isNoCancel) return;//如果禁止取消，则不执行任何操作
-                mChecks.remove(sd);
-                sd.checkIndex(-1);
+                mChecks.remove(check);
+                check.checkIndex(-1);
 
                 notifyItemChanged(position);
                 refreshCheckIndex();
@@ -248,8 +249,8 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
                     return;
                 }
             }
-            sd.checkIndex(mChecks.size());
-            mChecks.add(sd);
+            check.checkIndex(mChecks.size());
+            mChecks.add(check);
             notifyItemChanged(position);
             onSelectChange(position, true);
         });
@@ -573,8 +574,9 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         return mChecks;
     }
 
-    public void setChecks(List<Check> checks) {
-        mChecks = checks;
+    public void setChecks(List<? extends Check> checks) {
+        mChecks.clear();
+        mChecks.addAll(checks);
     }
 
     /**
