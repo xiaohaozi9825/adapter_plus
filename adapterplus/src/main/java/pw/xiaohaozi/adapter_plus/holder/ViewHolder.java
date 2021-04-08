@@ -18,7 +18,8 @@ public class ViewHolder<VDB extends ViewDataBinding> extends RecyclerView.ViewHo
 
     OnItemLongClickListener<VDB> mOnItemLongClickListener;
     OnLongClickListener<VDB> mOnLongClickListener;
-
+    private OnSelectChangeListener mOnSelectChangeListener;
+    private View mTriggerView;
     //①将原来的形参 View itemView 改为 Binding
     public ViewHolder(@NonNull VDB vdb) {
         //②super中需要返回itemView，所以需要传入Binding.getRoot()
@@ -30,17 +31,7 @@ public class ViewHolder<VDB extends ViewDataBinding> extends RecyclerView.ViewHo
         return mBinding;
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == mBinding.getRoot().getId()) {
-            if (mOnItemClickListener != null)
-                mOnItemClickListener.onItemClick(v, mBinding, getLayoutPosition());
-        } else {
-            if (mOnClickListener != null) {
-                mOnClickListener.onClick(v, mBinding, getLayoutPosition());
-            }
-        }
-    }
+
 
     @Override
     public boolean onLongClick(View v) {
@@ -72,5 +63,39 @@ public class ViewHolder<VDB extends ViewDataBinding> extends RecyclerView.ViewHo
         mOnLongClickListener = onLongClickListener;
     }
 
+    /**
+     * 设置触发器
+     *
+     * @param view 指定由该view触发选中事件
+     */
+    public void setTrigger(View view) {
+        if (mTriggerView != null) mTriggerView.setOnClickListener(null);
+        mTriggerView = view;
+        view.setOnClickListener(this);
+    }
 
+    public void setOnSelectChangeListener(OnSelectChangeListener onSelectChangeListener) {
+        mOnSelectChangeListener = onSelectChangeListener;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (mTriggerView != null && v.getId() == mTriggerView.getId()) {
+            Integer selectPosition = getLayoutPosition();
+            mOnSelectChangeListener.change(this, selectPosition);
+        } else {
+            if (v.getId() == mBinding.getRoot().getId()) {
+                if (mOnItemClickListener != null)
+                    mOnItemClickListener.onItemClick(v, mBinding, getLayoutPosition());
+            } else {
+                if (mOnClickListener != null) {
+                    mOnClickListener.onClick(v, mBinding, getLayoutPosition());
+                }
+            }
+        }
+    }
+
+    public interface OnSelectChangeListener {
+        void change(ViewHolder selectHolder, Integer position);
+    }
 }

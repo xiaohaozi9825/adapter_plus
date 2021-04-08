@@ -7,7 +7,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
-import pw.xiaohaozi.adapter_plus.holder.SelectHolder;
+import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
 
 /**
  * 描述：选择器适配器升级版，在数据结构中增加是否选择的状态值，用于处理更加复杂的选择情况
@@ -26,7 +26,7 @@ import pw.xiaohaozi.adapter_plus.holder.SelectHolder;
  * github：https://github.com/xiaohaozi9825
  * 创建时间：2020/7/21 0021
  */
-public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D, VH extends SelectHolder<VDB>>
+public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D, VH extends ViewHolder<VDB>>
         extends BaseAdapter<VDB, D, VH> {
     protected List<Check> mChecks;//已选列表 2020-7-22 15:38:29
 
@@ -37,7 +37,7 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D, VH exten
     }
 
     public SelectPlusAdapter() {
-
+        mChecks = new LinkedList<>();
     }
 
 
@@ -172,7 +172,7 @@ public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D, VH exten
     @Override
     protected <VG extends ViewGroup> VH onCreateViewHolder(@NonNull VG vg, @NonNull VDB vdb, int viewType) {
         final VH vh = createViewHolder(vg, vdb, viewType);
-        vh.setOnSelectChangeListener((selectHolder, position) -> {
+        vh.setOnSelectChangeListener((ViewHolder, position) -> {
             D d = getDataList().get(position);
             if (!(d instanceof Check)) return;
             Check sd = (Check) d;
