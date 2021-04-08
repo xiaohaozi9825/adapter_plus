@@ -161,14 +161,14 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      *
      * @param list
      */
-    public boolean refresh(List<? extends D> list) {
+    public <L extends List<? extends D>> boolean refresh(L list) {
         if (list == null) return false;
-        mDatas.clear();
-        mDatas.addAll(list);
-        if (mDatas instanceof ObservableList) {
+        mDatas = (List<D>) list;
+        if (list instanceof ObservableList) {
             ((ObservableList) mDatas).addOnListChangedCallback(new DynamicChangeCallback(this));
+        } else {
+            notifyDataSetChanged();
         }
-        if (!(mDatas instanceof ObservableList)) notifyDataSetChanged();
         return true;
     }
 
@@ -199,7 +199,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         mOnLongClickListener = onLongClickListener;
     }
 
-    public List<D> getDatas() {
+    public List<? extends D> getDatas() {
         return mDatas;
     }
 
