@@ -17,7 +17,7 @@ public class FriendAdapter extends SimpleAdapter<ItemFriendBinding, FriendInfo> 
 
 
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder<ItemFriendBinding> itemFriendBindingViewHolder, int position, @NonNull ItemFriendBinding itemFriendBinding, @NonNull FriendInfo friendInfo, int isSelect) {
-        itemFriendBinding.setFriendInfo(friendInfo);
+    protected void onBindViewHolder(@NonNull ViewHolder<ItemFriendBinding> holder, int position, @NonNull ItemFriendBinding binding, @NonNull FriendInfo data, int isSelect) {
+        binding.setFriendInfo(data);
     }
 }

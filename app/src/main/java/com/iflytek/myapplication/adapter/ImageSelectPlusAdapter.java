@@ -19,7 +19,7 @@ public class ImageSelectPlusAdapter extends SimpleAdapter<ItemSelectImageBinding
 
     @Override
     protected <VG extends ViewGroup> ViewHolder<ItemSelectImageBinding> onCreateViewHolder(@NonNull VG vg, ItemSelectImageBinding itemSelectImageBinding, int viewType) {
-         RecyclerView.LayoutManager layoutManager = ((RecyclerView) vg).getLayoutManager();
+        RecyclerView.LayoutManager layoutManager = ((RecyclerView) vg).getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
             GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
             mSpanCount = gridLayoutManager.getSpanCount();
@@ -36,14 +36,16 @@ public class ImageSelectPlusAdapter extends SimpleAdapter<ItemSelectImageBinding
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder<ItemSelectImageBinding> itemSelectImageBindingViewHolder, int position, @NonNull ItemSelectImageBinding itemSelectImageBinding, @NonNull ImageUrlInfo imageUrlInfo, int isSelect) {
-        itemSelectImageBinding.setUrl(imageUrlInfo.getUsl());
+    protected void onBindViewHolder(@NonNull ViewHolder<ItemSelectImageBinding> holder, int position, @NonNull ItemSelectImageBinding binding, @NonNull ImageUrlInfo data, int isSelect) {
+        binding.setUrl(data.getUsl());
         if (isSelect >= 0) {
-            itemSelectImageBinding.viewSelect.setVisibility(View.VISIBLE);
-            itemSelectImageBinding.ivSelect.setImageResource(R.drawable.ic_select);
+            binding.viewSelect.setVisibility(View.VISIBLE);
+            binding.ivSelect.setImageResource(R.drawable.ic_select);
+            binding.tvCheckIndex.setText("" + isSelect);
         } else {
-            itemSelectImageBinding.viewSelect.setVisibility(View.INVISIBLE);
-            itemSelectImageBinding.ivSelect.setImageResource(R.drawable.ic_no_select);
+            binding.viewSelect.setVisibility(View.INVISIBLE);
+            binding.ivSelect.setImageResource(R.drawable.ic_no_select);
+            binding.tvCheckIndex.setText("");
         }
     }
 

@@ -216,18 +216,22 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
             //先判断该item是否已经被选中了，如果是，则取消选择
             if (sd.checkIndex() >= 0) {
                 if (isNoCancel) return;//如果禁止取消，则不执行任何操作
-                mChecks.remove(d);
+                mChecks.remove(sd);
                 sd.checkIndex(-1);
+
                 notifyItemChanged(position);
+                refreshCheckIndex();
+
                 onSelectChange(position, false);
                 return;
             }
             //如果选择个数最大可选个数，则移除选中的第一个
             if (mMaxSelectSize <= mChecks.size()) {
                 if (isAutoRemove) {
-                    Check first = mChecks.remove(mChecks.size() - 1);
-
+                    Check first = mChecks.remove(0);
                     first.checkIndex(-1);
+                    refreshCheckIndex();
+
                     int indexOf = getDatas().indexOf(first);
                     notifyItemChanged(indexOf);
                     onSelectChange(indexOf, false);
@@ -252,13 +256,13 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
     public void onBindViewHolder(@NonNull VH viewHolder, int position) {
         D d = getDatas().get(position);
         if (d == null) {
-            onBindViewHolder(viewHolder, position, viewHolder.getBinding(), d,-1);
+            onBindViewHolder(viewHolder, position, viewHolder.getBinding(), d, -1);
         } else {
             if ((d instanceof Check)) {
-                Check sd = (Check)d;
-                onBindViewHolder(viewHolder, position, viewHolder.getBinding(), d,sd.checkIndex());
+                Check sd = (Check) d;
+                onBindViewHolder(viewHolder, position, viewHolder.getBinding(), d, sd.checkIndex());
             } else {
-                onBindViewHolder(viewHolder, position, viewHolder.getBinding(), d,-1);
+                onBindViewHolder(viewHolder, position, viewHolder.getBinding(), d, -1);
             }
         }
     }
@@ -285,18 +289,19 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
             return super.getItemViewType(position);
         }
     }
+
     /**
      * 绑定数据到view中
      * <p>
      * 该方法在选中状态改变时也会被调用
      *
-     * @param vh
+     * @param holder
      * @param position
-     * @param vdb
-     * @param d
+     * @param binding
+     * @param data
      * @param checkIndex
      */
-    protected abstract void onBindViewHolder(@NonNull VH vh, int position, @NonNull VDB vdb, @NonNull D d, int checkIndex);
+    protected abstract void onBindViewHolder(@NonNull VH holder, int position, @NonNull VDB binding, @NonNull D data, int checkIndex);
 
     @Override
     final public int getItemCount() {
@@ -471,7 +476,11 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
 
     private void refreshCheckIndex() {
         int index = 0;
-        for (Check check : mChecks) check.checkIndex(index++);
+        for (Check check : mChecks) {
+            check.checkIndex(index++);
+            int indexOf = getDatas().indexOf(check);
+            if (indexOf >= 0) notifyItemChanged(indexOf);
+        }
     }
 
     /**
@@ -541,6 +550,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
                 sd.checkIndex(-1);
             }
         }
+        refreshCheckIndex();
         if (mOnSelectChange != null)
             mOnSelectChange.onSelectAll(mChecks.size() == getDatas().size());
 

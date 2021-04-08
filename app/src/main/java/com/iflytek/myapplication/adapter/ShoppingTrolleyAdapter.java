@@ -41,27 +41,27 @@ public class ShoppingTrolleyAdapter extends MultiTypeAdapter {
      * <p>
      * 可以使用getItemViewType(position)获取对应的viewType
      *
-     * @param viewDataBindingViewHolder
+     * @param holder
      * @param position
      * @param binding
-     * @param viewTyper
+     * @param data
      */
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder<ViewDataBinding> viewDataBindingViewHolder, int position, @NonNull ViewDataBinding binding, @NonNull ViewTyper viewTyper, int isSelect) {
+    protected void onBindViewHolder(@NonNull ViewHolder<ViewDataBinding> holder, int position, @NonNull ViewDataBinding binding, @NonNull ViewTyper data, int isSelect) {
         switch (getItemViewType(position)) {
             case 0:
-                ((ItemTopBinding) binding).setGoodsTop((GoodsTopInfo) viewTyper);
+                ((ItemTopBinding) binding).setGoodsTop((GoodsTopInfo) data);
 //                TopHolder topHolder = (TopHolder) viewHolder;
 //                topHolder.getBinding().setGoodsTop((GoodsTopInfo) getDataList().get(position));
                 break;
             case 1:
-                ((ItemCentreBinding) binding).setGoodsCenter((GoodsCentreInfo) viewTyper);
+                ((ItemCentreBinding) binding).setGoodsCenter((GoodsCentreInfo) data);
 
 //                CentreHolder centerHolder = (CentreHolder) viewHolder;
 //                centerHolder.getBinding().setGoodsCenter((GoodsCentreInfo) getDataList().get(position));
                 break;
             case 2:
-                ((ItemBottomBinding)binding).setGoodsBottom((GoodsBottomInfo) viewTyper);
+                ((ItemBottomBinding)binding).setGoodsBottom((GoodsBottomInfo) data);
 
 //                BottomHolder bottomHolder = (BottomHolder) viewHolder;
 //                bottomHolder.getBinding().setGoodsBottom((GoodsBottomInfo) getDataList().get(position));

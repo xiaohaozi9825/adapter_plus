@@ -18,7 +18,7 @@ public class MySingelTypeAdapter extends SingleTypeAdapter<ItemFriendBinding, Fr
 
 
     @Override
-    protected void onBindViewHolder(@NonNull MySingelTypeHolder mySingelTypeHolder, int position, @NonNull ItemFriendBinding itemFriendBinding, @NonNull FriendInfo friendInfo, int isSelect) {
-        itemFriendBinding.setFriendInfo(friendInfo);
+    protected void onBindViewHolder(@NonNull MySingelTypeHolder holder, int position, @NonNull ItemFriendBinding binding, @NonNull FriendInfo data, int isSelect) {
+        binding.setFriendInfo(data);
     }
 }
