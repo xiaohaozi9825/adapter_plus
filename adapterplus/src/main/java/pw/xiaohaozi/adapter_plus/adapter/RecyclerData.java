@@ -8,5 +8,5 @@ public interface RecyclerData {
      *
      * @return
      */
-    int get_RV_ItemViewType();
+    int getItemViewType();
 }

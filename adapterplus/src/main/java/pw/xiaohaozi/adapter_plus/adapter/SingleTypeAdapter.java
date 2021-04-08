@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
-import pw.xiaohaozi.adapter_plus.holder.SelectHolder;
 import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
 
 /**
@@ -28,7 +27,7 @@ import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
  * @param <D>
  * @param <VH>
  */
-public abstract class SingleTypeAdapter<VDB extends ViewDataBinding, D, VH extends SelectHolder<VDB>> extends SelectPlusAdapter<VDB, D, VH> {
+public abstract class SingleTypeAdapter<VDB extends ViewDataBinding, D, VH extends ViewHolder<VDB>> extends SelectPlusAdapter<VDB, D, VH> {
 
 
 

@@ -23,7 +23,7 @@ public class GoodsBottomInfo extends BaseObservable implements RecyclerData {
     }
 
     @Override
-    public int get_RV_ItemViewType() {
+    public int getItemViewType() {
         return 2;
     }
 }

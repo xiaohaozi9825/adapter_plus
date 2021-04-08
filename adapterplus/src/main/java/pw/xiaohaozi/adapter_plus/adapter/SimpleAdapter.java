@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
-import pw.xiaohaozi.adapter_plus.holder.SelectHolder;
+import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
 import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
 
 /**
@@ -16,7 +16,7 @@ import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
  * @param <VDB>
  * @param <D>
  */
-public abstract class SimpleAdapter<VDB extends ViewDataBinding, D> extends SingleTypeAdapter<VDB, D, SelectHolder<VDB>> {
+public abstract class SimpleAdapter<VDB extends ViewDataBinding, D> extends SingleTypeAdapter<VDB, D, ViewHolder<VDB>> {
     /**
      * 父类SingleTypeAdapter中是使用反射创建ViewHolder的，对性能有一定影响
      * 而这里已经明确了ViewHolder的类型了，所以直接用new的方式创建
@@ -26,7 +26,7 @@ public abstract class SimpleAdapter<VDB extends ViewDataBinding, D> extends Sing
      * @return
      */
     @Override
-    protected <VG extends ViewGroup>SelectHolder<VDB> createViewHolder(@NonNull VG vg,@NonNull  VDB vdb, int viewType) {
-        return new SelectHolder<>(vdb);
+    protected <VG extends ViewGroup>ViewHolder<VDB> createViewHolder(@NonNull VG vg,@NonNull  VDB vdb, int viewType) {
+        return new ViewHolder<>(vdb);
     }
 }

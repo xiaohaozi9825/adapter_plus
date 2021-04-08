@@ -233,7 +233,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
     final public int getItemViewType(int position) {
         D d = mDataList.get(position);
         if (d instanceof RecyclerData) {
-            return ((RecyclerData) d).get_RV_ItemViewType();
+            return ((RecyclerData) d).getItemViewType();
         } else {
             return super.getItemViewType(position);
         }

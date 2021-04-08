@@ -18,12 +18,11 @@ public class ImageUrlInfo implements Check {
     }
 
     @Override
-    public boolean isSelected___() {
+    public boolean checkIndex() {
         return selected;
     }
 
-    @Override
-    public void setSelected___(boolean selected___) {
+    public void checkIndex(boolean selected___) {
         selected = selected___;
     }
 
