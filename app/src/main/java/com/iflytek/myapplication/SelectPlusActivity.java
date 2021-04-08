@@ -4,8 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.ObservableArrayList;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import pw.xiaohaozi.adapter_plus.adapter.SelectAdapter;
-import pw.xiaohaozi.adapter_plus.adapter.SelectPlusAdapter;
+import pw.xiaohaozi.adapter_plus.adapter.BaseAdapter;
+
 
 import android.os.Bundle;
 import android.util.Log;
@@ -56,11 +56,11 @@ public class SelectPlusActivity extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false));
         mRecyclerView.post(() -> {
-            mImageSelectAdapter = new ImageSelectPlusAdapter(null);
+            mImageSelectAdapter = new ImageSelectPlusAdapter();
             mImageSelectAdapter.setOnItemClickListener((v, itemSelectImageBinding, position) -> {
                 Toast.makeText(getApplicationContext(), "点击查看大图", Toast.LENGTH_SHORT).show();
             });
-            mImageSelectAdapter.setOnSelectChange(new SelectAdapter.OnSelectChange<ImageUrlInfo>() {
+            mImageSelectAdapter.setOnSelectChange(new BaseAdapter.OnSelectChange<ImageUrlInfo>() {
                 @Override
                 public void onSelectChange(int position, boolean isSelect, ImageUrlInfo imageUrlInfo) {
                     if (isSelect) {

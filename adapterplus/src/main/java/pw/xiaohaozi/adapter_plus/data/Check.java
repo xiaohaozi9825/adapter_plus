@@ -1,4 +1,4 @@
-package pw.xiaohaozi.adapter_plus.adapter;
+package pw.xiaohaozi.adapter_plus.data;
 
 public interface Check {
     /**

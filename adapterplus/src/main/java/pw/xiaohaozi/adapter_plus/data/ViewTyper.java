@@ -1,6 +1,6 @@
-package pw.xiaohaozi.adapter_plus.adapter;
+package pw.xiaohaozi.adapter_plus.data;
 
-public interface RecyclerData {
+public interface ViewTyper {
     /**
      * 获取item类型，当recyclerview要显示多种item类型时，javaBean需要实现RecyclerData接口
      * 每个JavaBean中 get_RV_ItemViewType();方法必须返回不同的值

@@ -1,6 +1,6 @@
 package com.iflytek.myapplication.bean;
 
-import pw.xiaohaozi.adapter_plus.adapter.Check;
+import pw.xiaohaozi.adapter_plus.data.Check;
 
 /**
  * 描述：
@@ -10,7 +10,7 @@ import pw.xiaohaozi.adapter_plus.adapter.Check;
  * 创建时间：2020/7/21 0021 17:39
  */
 public class ImageUrlInfo implements Check {
-    private boolean selected;
+    private int checkIndex =-1;
     private String usl;
 
     public ImageUrlInfo(String usl) {
@@ -18,12 +18,12 @@ public class ImageUrlInfo implements Check {
     }
 
     @Override
-    public boolean checkIndex() {
-        return selected;
+    public int checkIndex() {
+        return checkIndex;
     }
 
-    public void checkIndex(boolean selected___) {
-        selected = selected___;
+    public void checkIndex(int index) {
+        checkIndex = index;
     }
 
     public String getUsl() {

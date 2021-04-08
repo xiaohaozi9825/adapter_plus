@@ -8,9 +8,10 @@ import com.iflytek.myapplication.databinding.ItemBottomBinding;
 import com.iflytek.myapplication.databinding.ItemCentreBinding;
 import com.iflytek.myapplication.databinding.ItemTopBinding;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
 import pw.xiaohaozi.adapter_plus.adapter.MultiTypeAdapter;
-import pw.xiaohaozi.adapter_plus.adapter.RecyclerData;
+import pw.xiaohaozi.adapter_plus.data.ViewTyper;
 import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
 
 
@@ -42,32 +43,31 @@ public class ShoppingTrolleyAdapter extends MultiTypeAdapter {
      *
      * @param viewDataBindingViewHolder
      * @param position
-     * @param viewDataBinding
-     * @param recyclerData
+     * @param binding
+     * @param viewTyper
      */
     @Override
-    protected void onBindViewHolder(ViewHolder<ViewDataBinding> viewDataBindingViewHolder,
-                                    int position, ViewDataBinding viewDataBinding,
-                                    RecyclerData recyclerData) {
+    protected void onBindViewHolder(@NonNull ViewHolder<ViewDataBinding> viewDataBindingViewHolder, int position, @NonNull ViewDataBinding binding, @NonNull ViewTyper viewTyper, int isSelect) {
         switch (getItemViewType(position)) {
             case 0:
-                ((ItemTopBinding) viewDataBinding).setGoodsTop((GoodsTopInfo) recyclerData);
+                ((ItemTopBinding) binding).setGoodsTop((GoodsTopInfo) viewTyper);
 //                TopHolder topHolder = (TopHolder) viewHolder;
 //                topHolder.getBinding().setGoodsTop((GoodsTopInfo) getDataList().get(position));
                 break;
             case 1:
-                ((ItemCentreBinding) viewDataBinding).setGoodsCenter((GoodsCentreInfo) recyclerData);
+                ((ItemCentreBinding) binding).setGoodsCenter((GoodsCentreInfo) viewTyper);
 
 //                CentreHolder centerHolder = (CentreHolder) viewHolder;
 //                centerHolder.getBinding().setGoodsCenter((GoodsCentreInfo) getDataList().get(position));
                 break;
             case 2:
-                ((ItemBottomBinding)viewDataBinding).setGoodsBottom((GoodsBottomInfo) recyclerData);
+                ((ItemBottomBinding)binding).setGoodsBottom((GoodsBottomInfo) viewTyper);
 
 //                BottomHolder bottomHolder = (BottomHolder) viewHolder;
 //                bottomHolder.getBinding().setGoodsBottom((GoodsBottomInfo) getDataList().get(position));
                 break;
         }
+
     }
 
     /**

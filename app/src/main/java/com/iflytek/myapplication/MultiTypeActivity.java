@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.ObservableArrayList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import pw.xiaohaozi.adapter_plus.adapter.RecyclerData;
+import pw.xiaohaozi.adapter_plus.data.ViewTyper;
 
 import android.os.Bundle;
 
@@ -32,7 +32,7 @@ public class MultiTypeActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        ObservableArrayList<RecyclerData> data = new ObservableArrayList<>();
+        ObservableArrayList<ViewTyper> data = new ObservableArrayList<>();
         data.add(new GoodsTopInfo("荣耀官方旗舰店"));
         data.add(new GoodsCentreInfo("https://img.alicdn.com/bao/uploaded/i5/TB1M4HAoLb2gK0jSZK9ahGEgFXa_041458.jpg_80x80.jpg"
                ,"荣耀V30 pro","5G SA/NSA双模；冰岛幻境；套餐三；8+128G","¥998.99" ));

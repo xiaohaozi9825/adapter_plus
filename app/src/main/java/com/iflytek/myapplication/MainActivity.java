@@ -45,9 +45,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_multi_type:
                 startActivity(new Intent(this, MultiTypeActivity.class));
                 break;
-            case R.id.btn_select:
-                startActivity(new Intent(this, SelectImageActivity.class));
-                break;
+//            case R.id.btn_select:
+//                startActivity(new Intent(this, SelectImageActivity.class));
+//                break;
             case R.id.btn_select_plus:
                 startActivity(new Intent(this, SelectPlusActivity.class));
                 break;

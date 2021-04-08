@@ -3,6 +3,7 @@ package com.iflytek.myapplication.adapter;
 import com.iflytek.myapplication.bean.FriendInfo;
 import com.iflytek.myapplication.databinding.ItemFriendBinding;
 
+import androidx.annotation.NonNull;
 import pw.xiaohaozi.adapter_plus.adapter.SimpleAdapter;
 import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
 
@@ -14,9 +15,9 @@ import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
  */
 public class FriendAdapter extends SimpleAdapter<ItemFriendBinding, FriendInfo> {
 
+
     @Override
-    protected void onBindViewHolder(ViewHolder<ItemFriendBinding> itemFriendBindingViewHolder,
-                                    int position, ItemFriendBinding itemFriendBinding, FriendInfo friendInfo) {
+    protected void onBindViewHolder(@NonNull ViewHolder<ItemFriendBinding> itemFriendBindingViewHolder, int position, @NonNull ItemFriendBinding itemFriendBinding, @NonNull FriendInfo friendInfo, int isSelect) {
         itemFriendBinding.setFriendInfo(friendInfo);
     }
 }

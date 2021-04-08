@@ -2,10 +2,10 @@ package pw.xiaohaozi.adapter_plus.adapter;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -14,6 +14,8 @@ import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableList;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
+import pw.xiaohaozi.adapter_plus.data.Check;
+import pw.xiaohaozi.adapter_plus.data.ViewTyper;
 import pw.xiaohaozi.adapter_plus.listener.OnItemLongClickListener;
 import pw.xiaohaozi.adapter_plus.listener.OnClickListener;
 import pw.xiaohaozi.adapter_plus.listener.OnItemClickListener;
@@ -28,7 +30,7 @@ import pw.xiaohaozi.adapter_plus.listener.OnLongClickListener;
  * @param <VH>
  */
 public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends ViewHolder<VDB>> extends RecyclerView.Adapter<VH> {
-    private List<D> mDataList;
+    private List<D> mDatas;
     protected Context mContext;
     private OnItemClickListener mOnItemClickListener;
     private OnClickListener mOnClickListener;
@@ -40,6 +42,8 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
     Warning mAutoRemoveWarning;
     boolean isAutoRemove = true;//当超出选中个数后是否自动删除最先选中的
     boolean isNoCancel = false;//是否禁止取消,当再次点击被选中的目标是，不执行任何操作
+    protected List<Check> mChecks = new LinkedList<>();//已选列表 2020-7-22 15:38:29
+
     /**
      * 追加数据，可用于上拉加载更多
      * <p>
@@ -49,10 +53,10 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      */
     @Deprecated
     public <A extends List<D>> boolean add(A list) {
-        if (mDataList == null) {
+        if (mDatas == null) {
             return refresh(list);
         } else {
-            return mDataList.addAll(list);
+            return mDatas.addAll(list);
         }
     }
 
@@ -65,20 +69,20 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      */
     @Deprecated
     public boolean add(D data) {
-        if (mDataList == null) {
-            mDataList = new ObservableArrayList<>();
-            mDataList.add(data);
-            return refresh(mDataList);
+        if (mDatas == null) {
+            mDatas = new ObservableArrayList<>();
+            mDatas.add(data);
+            return refresh(mDatas);
         } else {
 //            if (!mDataList.contains(data)) {
 //                mDataList.add(data);
 //            }
 
-            if (mDataList instanceof ObservableList)
-                return mDataList.add(data);
+            if (mDatas instanceof ObservableList)
+                return mDatas.add(data);
             else {
-                boolean add = mDataList.add(data);
-                if (add) notifyItemInserted(mDataList.size() - 1);
+                boolean add = mDatas.add(data);
+                if (add) notifyItemInserted(mDatas.size() - 1);
                 return add;
             }
         }
@@ -94,13 +98,13 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      */
     @Deprecated
     public boolean add(int position, D data) {
-        if (mDataList == null) {
-            mDataList = new ObservableArrayList<>();
-            mDataList.add(data);
-            return refresh(mDataList);
+        if (mDatas == null) {
+            mDatas = new ObservableArrayList<>();
+            mDatas.add(data);
+            return refresh(mDatas);
         } else {
-            mDataList.add(position, data);
-            if (!(mDataList instanceof ObservableList)) notifyItemInserted(position);
+            mDatas.add(position, data);
+            if (!(mDatas instanceof ObservableList)) notifyItemInserted(position);
             return true;
         }
     }
@@ -114,8 +118,8 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      */
     @Deprecated
     public boolean remove(int position) {
-        if (mDataList == null) return false;
-        D d = mDataList.remove(position);
+        if (mDatas == null) return false;
+        D d = mDatas.remove(position);
         return d != null;
     }
 
@@ -128,9 +132,9 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      */
     @Deprecated
     public boolean remove(D data) {
-        if (mDataList == null) return false;
+        if (mDatas == null) return false;
         if (data == null) return false;
-        return mDataList.remove(data);
+        return mDatas.remove(data);
     }
 
     /**
@@ -140,8 +144,8 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      */
     @Deprecated
     public boolean remove() {
-        if (mDataList == null) return false;
-        mDataList.clear();
+        if (mDatas == null) return false;
+        mDatas.clear();
         return true;
     }
 
@@ -152,9 +156,9 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      */
     public <A extends List<D>> boolean refresh(A list) {
         if (list == null) return false;
-        mDataList = list;
-        if (mDataList instanceof ObservableList) {
-            ((ObservableList) mDataList).addOnListChangedCallback(new DynamicChangeCallback(this));
+        mDatas = list;
+        if (mDatas instanceof ObservableList) {
+            ((ObservableList) mDatas).addOnListChangedCallback(new DynamicChangeCallback(this));
         }
         notifyDataSetChanged();
         return true;
@@ -187,8 +191,8 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         mOnLongClickListener = onLongClickListener;
     }
 
-    public List<D> getDataList() {
-        return mDataList;
+    public List<D> getDatas() {
+        return mDatas;
     }
 
     @NonNull
@@ -205,14 +209,58 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         if (mOnItemLongClickListener != null)
             vh.setOnItemLongClickListener(mOnItemLongClickListener);
         if (mOnLongClickListener != null) vh.setOnLongClickListener(mOnLongClickListener);
+        vh.setOnSelectChangeListener((ViewHolder, position) -> {
+            D d = getDatas().get(position);
+            if (!(d instanceof Check)) return;
+            Check sd = (Check) d;
+            //先判断该item是否已经被选中了，如果是，则取消选择
+            if (sd.checkIndex() >= 0) {
+                if (isNoCancel) return;//如果禁止取消，则不执行任何操作
+                mChecks.remove(d);
+                sd.checkIndex(-1);
+                notifyItemChanged(position);
+                onSelectChange(position, false);
+                return;
+            }
+            //如果选择个数最大可选个数，则移除选中的第一个
+            if (mMaxSelectSize <= mChecks.size()) {
+                if (isAutoRemove) {
+                    Check first = mChecks.remove(mChecks.size() - 1);
+
+                    first.checkIndex(-1);
+                    int indexOf = getDatas().indexOf(first);
+                    notifyItemChanged(indexOf);
+                    onSelectChange(indexOf, false);
+                } else {
+                    if (mAutoRemoveWarning != null)
+                        mAutoRemoveWarning.warn("您最多只能选中" + mMaxSelectSize + "条");
+                    return;
+                }
+            }
+            sd.checkIndex(mChecks.size());
+            mChecks.add(sd);
+            notifyItemChanged(position);
+            onSelectChange(position, true);
+        });
+
         return vh;
+
     }
 
 
     @Override
     public void onBindViewHolder(@NonNull VH viewHolder, int position) {
-        Log.i("测试泛型", "onBindViewHolder: " + (mDataList.get(position) instanceof Check));
-        onBindViewHolder(viewHolder, position, viewHolder.getBinding(), mDataList.get(position));
+        D d = getDatas().get(position);
+        if (d == null) {
+            onBindViewHolder(viewHolder, position, viewHolder.getBinding(), d,-1);
+        } else {
+            if ((d instanceof Check)) {
+                Check sd = (Check)d;
+                onBindViewHolder(viewHolder, position, viewHolder.getBinding(), d,sd.checkIndex());
+            } else {
+                onBindViewHolder(viewHolder, position, viewHolder.getBinding(), d,-1);
+            }
+        }
     }
 
     /**
@@ -225,23 +273,34 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      */
     protected abstract <VG extends ViewGroup> VH onCreateViewHolder(@NonNull VG parent, @NonNull VDB binding, int viewType);
 
-    protected abstract void onBindViewHolder(@NonNull VH vh, int position, @NonNull VDB vdb, @NonNull D d);
 
     protected abstract int getLayoutRes(int viewType);
 
     @Override
     final public int getItemViewType(int position) {
-        D d = mDataList.get(position);
-        if (d instanceof RecyclerData) {
-            return ((RecyclerData) d).getItemViewType();
+        D d = mDatas.get(position);
+        if (d instanceof ViewTyper) {
+            return ((ViewTyper) d).getItemViewType();
         } else {
             return super.getItemViewType(position);
         }
     }
+    /**
+     * 绑定数据到view中
+     * <p>
+     * 该方法在选中状态改变时也会被调用
+     *
+     * @param vh
+     * @param position
+     * @param vdb
+     * @param d
+     * @param checkIndex
+     */
+    protected abstract void onBindViewHolder(@NonNull VH vh, int position, @NonNull VDB vdb, @NonNull D d, int checkIndex);
 
     @Override
     final public int getItemCount() {
-        return mDataList == null ? 0 : mDataList.size();
+        return mDatas == null ? 0 : mDatas.size();
     }
 
 
@@ -314,43 +373,6 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         mAutoRemoveWarning = warning;
     }
 
-    /**
-     * 增加一条选中的item
-     *
-     * @param d
-     * @return //
-     */
-    public abstract void addSelectItem(D d);
-
-    /**
-     * 取消选中状态
-     *
-     * @param d
-     * @return
-     */
-    public abstract void cancelSelectItem(D d);
-
-
-    /**
-     * 全选
-     *
-     * @return
-     */
-    public abstract void selectAll();
-
-    /**
-     * 全不选
-     *
-     * @return
-     */
-    public abstract void cancelAll();
-
-    /**
-     * 反选
-     *
-     * @return
-     */
-    public abstract void invertSelect();
 
     /**
      * 是否允许取消已选状态
@@ -363,7 +385,6 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
     public void setNoCancel(boolean noCancel) {
         isNoCancel = noCancel;
     }
-
 
 
     /**
@@ -391,16 +412,161 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         /**
          * 选中状态改变
          *
-         * @param position    发生改变的索引
-         * @param isSelect    改变后的状态
-         * @param d           被改变的数据
+         * @param position 发生改变的索引
+         * @param isSelect 改变后的状态
+         * @param d        被改变的数据
          */
         void onSelectChange(int position, boolean isSelect, D d);
 
         /**
          * 是否全选，全选和反选，还有全不选调用
+         *
          * @param isSelectAll
          */
-        void onSelectAll( boolean isSelectAll);
+        void onSelectAll(boolean isSelectAll);
+    }
+
+
+    /**
+     * 增加一条选中的item
+     *
+     * @param d
+     * @return
+     */
+    public void addSelectItem(D d) {
+        if (d == null) return;
+        if (!(d instanceof Check)) return;
+        Check sd = (Check) d;
+        if (sd.checkIndex() >= 0) return;//如果已经是选中状态，不操作
+        sd.checkIndex(mChecks.size());
+        mChecks.add(sd);
+        if (getDatas() != null && getDatas().contains(d)) {
+            int position = getDatas().indexOf(d);
+            notifyItemChanged(position);
+            onSelectChange(position, true);
+        }
+    }
+
+    /**
+     * 取消选中状态
+     *
+     * @param d
+     * @return
+     */
+
+    public void cancelSelectItem(D d) {
+        if (d == null) return;
+        if (!(d instanceof Check)) return;
+        Check sd = (Check) d;
+        if (sd.checkIndex() < 0) return;//如果已经是未选中状态，不操作
+        mChecks.remove(sd);
+        sd.checkIndex(-1);
+        refreshCheckIndex();
+        if (getDatas() != null && getDatas().contains(d)) {
+            int position = getDatas().indexOf(d);
+            notifyItemChanged(position);
+            onSelectChange(position, false);
+        }
+    }
+
+    private void refreshCheckIndex() {
+        int index = 0;
+        for (Check check : mChecks) check.checkIndex(index++);
+    }
+
+    /**
+     * 全选
+     * 当限定了最大选择个数时，从第一个开始炫，直到达到可选的最大个数
+     *
+     * @return
+     */
+    public void selectAll() {
+        mChecks.clear();
+        for (int i = 0; i < getDatas().size(); i++) {
+            D d = getDatas().get(i);
+            if (!(d instanceof Check)) return;
+            Check sd = (Check) d;
+            if (mChecks.size() < mMaxSelectSize) {
+                sd.checkIndex(mChecks.size());
+                mChecks.add(sd);
+            } else {
+                sd.checkIndex(-1);
+                refreshCheckIndex();
+            }
+        }
+        notifyDataSetChanged();
+        if (mOnSelectChange != null) mOnSelectChange.onSelectAll(true);
+
+    }
+
+    /**
+     * 全不选
+     *
+     * @return
+     */
+    public void cancelAll() {
+
+        for (Check d : mChecks) {
+            if (d == null) continue;
+            d.checkIndex(-1);
+        }
+        mChecks.clear();
+        notifyDataSetChanged();
+        if (mOnSelectChange != null) mOnSelectChange.onSelectAll(false);
+
+    }
+
+    /**
+     * 反选
+     * <p>
+     * 如果限定了最大可选个数，选中状态从第一个开始计数，当达到最大可选个数时，后面都不选
+     *
+     * @return
+     */
+    public void invertSelect() {
+        mChecks.clear();
+        for (int i = 0; i < getDatas().size(); i++) {
+            D d = getDatas().get(i);
+            if (!(d instanceof Check)) return;
+            Check sd = (Check) d;
+            int checkIndex = sd.checkIndex();
+            if (mChecks.size() < mMaxSelectSize) {
+                if (checkIndex < 0) {
+                    sd.checkIndex(mChecks.size());
+                    mChecks.add(sd);
+                } else {
+                    sd.checkIndex(-1);
+                }
+            } else {
+                sd.checkIndex(-1);
+            }
+        }
+        if (mOnSelectChange != null)
+            mOnSelectChange.onSelectAll(mChecks.size() == getDatas().size());
+
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 获取被选中的item
+     *
+     * @return
+     */
+    public List<Check> getChecks() {
+        return mChecks;
+    }
+
+
+    /**
+     * 当选中状态发生改变时会回调该方法
+     *
+     * @param position 被改变的索引
+     * @param isSelect 是否被选中
+     */
+    protected void onSelectChange(int position, boolean isSelect) {
+        if (mOnSelectChange != null) {
+            mOnSelectChange.onSelectChange(position, isSelect, getDatas().get(position));
+            mOnSelectChange.onSelectAll(mChecks.size() == getDatas().size());
+        }
     }
 }

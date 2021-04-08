@@ -7,48 +7,38 @@ import com.iflytek.myapplication.R;
 import com.iflytek.myapplication.bean.ImageUrlInfo;
 import com.iflytek.myapplication.databinding.ItemSelectImageBinding;
 
-import java.util.LinkedList;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import pw.xiaohaozi.adapter_plus.adapter.SelectPlusAdapter;
-import pw.xiaohaozi.adapter_plus.holder.SelectHolder;
+import pw.xiaohaozi.adapter_plus.adapter.SimpleAdapter;
+import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
 
 
-public class ImageSelectPlusAdapter extends SelectPlusAdapter<ItemSelectImageBinding, ImageUrlInfo, SelectHolder<ItemSelectImageBinding>> {
+public class ImageSelectPlusAdapter extends SimpleAdapter<ItemSelectImageBinding, ImageUrlInfo> {
     private int mSpanCount;
 
-    public ImageSelectPlusAdapter(LinkedList<ImageUrlInfo> selecteds) {
-        super(selecteds);
-    }
-
     @Override
-    protected <VG extends ViewGroup> SelectHolder<ItemSelectImageBinding>
-    onCreateViewHolder(@NonNull VG vg, ItemSelectImageBinding vdb, int viewType) {
-        RecyclerView.LayoutManager layoutManager = ((RecyclerView) vg).getLayoutManager();
+    protected <VG extends ViewGroup> ViewHolder<ItemSelectImageBinding> onCreateViewHolder(@NonNull VG vg, ItemSelectImageBinding itemSelectImageBinding, int viewType) {
+         RecyclerView.LayoutManager layoutManager = ((RecyclerView) vg).getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
             GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
             mSpanCount = gridLayoutManager.getSpanCount();
         }
-        SelectHolder<ItemSelectImageBinding> viewHolder = super.onCreateViewHolder(vg, vdb, viewType);
-        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) vdb.cardView.getLayoutParams();
+        ViewHolder<ItemSelectImageBinding> viewHolder = super.onCreateViewHolder(vg, itemSelectImageBinding, viewType);
+        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) itemSelectImageBinding.cardView.getLayoutParams();
         layoutParams.height = (vg.getWidth() - vg.getPaddingLeft() - vg.getPaddingRight()) / mSpanCount - layoutParams.leftMargin - layoutParams.rightMargin;
-        vdb.cardView.setLayoutParams(layoutParams);
-
+        itemSelectImageBinding.cardView.setLayoutParams(layoutParams);
 
 
         //指定由哪个控件触发选中事件，默认 binding.getRoot()
-        viewHolder.setTrigger(vdb.ivSelect);
+        viewHolder.setTrigger(itemSelectImageBinding.ivSelect);
         return viewHolder;
     }
 
     @Override
-    protected void onBindViewHolder(SelectHolder<ItemSelectImageBinding> itemSelectImageBindingSelectHolder,
-                                    int position, ItemSelectImageBinding itemSelectImageBinding,
-                                    ImageUrlInfo imageUrlInfo, boolean isSelect) {
+    protected void onBindViewHolder(@NonNull ViewHolder<ItemSelectImageBinding> itemSelectImageBindingViewHolder, int position, @NonNull ItemSelectImageBinding itemSelectImageBinding, @NonNull ImageUrlInfo imageUrlInfo, int isSelect) {
         itemSelectImageBinding.setUrl(imageUrlInfo.getUsl());
-        if (isSelect) {
+        if (isSelect >= 0) {
             itemSelectImageBinding.viewSelect.setVisibility(View.VISIBLE);
             itemSelectImageBinding.ivSelect.setImageResource(R.drawable.ic_select);
         } else {
@@ -56,6 +46,7 @@ public class ImageSelectPlusAdapter extends SelectPlusAdapter<ItemSelectImageBin
             itemSelectImageBinding.ivSelect.setImageResource(R.drawable.ic_no_select);
         }
     }
+
 
 //    @Override
 //    protected void onSelectChange(int position, boolean isSelect) {

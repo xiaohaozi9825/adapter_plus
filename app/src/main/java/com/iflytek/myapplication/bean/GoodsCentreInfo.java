@@ -3,9 +3,9 @@ package com.iflytek.myapplication.bean;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
-import pw.xiaohaozi.adapter_plus.adapter.RecyclerData;
+import pw.xiaohaozi.adapter_plus.data.ViewTyper;
 
-public class GoodsCentreInfo extends BaseObservable implements RecyclerData {
+public class GoodsCentreInfo extends BaseObservable implements ViewTyper {
     private String goodsImage;
     private String goodsName;
     private String goodsMsg;
