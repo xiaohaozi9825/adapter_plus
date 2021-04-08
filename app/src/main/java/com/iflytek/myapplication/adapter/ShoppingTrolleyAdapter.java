@@ -10,6 +10,7 @@ import com.iflytek.myapplication.databinding.ItemTopBinding;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.RecyclerView;
 import pw.xiaohaozi.adapter_plus.adapter.MultiTypeAdapter;
 import pw.xiaohaozi.adapter_plus.data.ViewTyper;
 import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
@@ -47,7 +48,8 @@ public class ShoppingTrolleyAdapter extends MultiTypeAdapter {
      * @param data
      */
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder<ViewDataBinding> holder, int position, @NonNull ViewDataBinding binding, @NonNull ViewTyper data, int isSelect) {
+    protected void onBindViewHolder(@NonNull ViewHolder<ViewDataBinding> holder, int position,
+                                    @NonNull ViewDataBinding binding, @NonNull ViewTyper data, int checkIndex) {
         switch (getItemViewType(position)) {
             case 0:
                 ((ItemTopBinding) binding).setGoodsTop((GoodsTopInfo) data);
@@ -88,4 +90,5 @@ public class ShoppingTrolleyAdapter extends MultiTypeAdapter {
         }
         return -1;
     }
+
 }

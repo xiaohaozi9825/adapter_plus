@@ -120,6 +120,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
     public boolean remove(int position) {
         if (mDatas == null) return false;
         D d = mDatas.remove(position);
+        if (!(mDatas instanceof ObservableList)) notifyItemRemoved(position);
         return d != null;
     }
 
@@ -134,7 +135,12 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
     public boolean remove(D data) {
         if (mDatas == null) return false;
         if (data == null) return false;
-        return mDatas.remove(data);
+        int indexOf = mDatas.indexOf(data);
+        if (indexOf >= 0) {
+            if (!(mDatas instanceof ObservableList)) notifyItemRemoved(indexOf);
+            return mDatas.remove(data);
+        }
+        return false;
     }
 
     /**
@@ -146,6 +152,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
     public boolean remove() {
         if (mDatas == null) return false;
         mDatas.clear();
+        if (!(mDatas instanceof ObservableList)) notifyDataSetChanged();
         return true;
     }
 
@@ -160,7 +167,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         if (mDatas instanceof ObservableList) {
             ((ObservableList) mDatas).addOnListChangedCallback(new DynamicChangeCallback(this));
         }
-        notifyDataSetChanged();
+        if (!(mDatas instanceof ObservableList)) notifyDataSetChanged();
         return true;
     }
 
@@ -566,6 +573,9 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         return mChecks;
     }
 
+    public void setChecks(List<Check> checks) {
+        mChecks = checks;
+    }
 
     /**
      * 当选中状态发生改变时会回调该方法

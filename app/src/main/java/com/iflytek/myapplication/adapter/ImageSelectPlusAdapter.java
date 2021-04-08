@@ -18,20 +18,20 @@ public class ImageSelectPlusAdapter extends SimpleAdapter<ItemSelectImageBinding
     private int mSpanCount;
 
     @Override
-    protected <VG extends ViewGroup> ViewHolder<ItemSelectImageBinding> onCreateViewHolder(@NonNull VG vg, ItemSelectImageBinding itemSelectImageBinding, int viewType) {
-        RecyclerView.LayoutManager layoutManager = ((RecyclerView) vg).getLayoutManager();
+    protected <VG extends ViewGroup> ViewHolder<ItemSelectImageBinding> onCreateViewHolder(@NonNull VG parent, ItemSelectImageBinding binding, int viewType) {
+        RecyclerView.LayoutManager layoutManager = ((RecyclerView) parent).getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
             GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
             mSpanCount = gridLayoutManager.getSpanCount();
         }
-        ViewHolder<ItemSelectImageBinding> viewHolder = super.onCreateViewHolder(vg, itemSelectImageBinding, viewType);
-        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) itemSelectImageBinding.cardView.getLayoutParams();
-        layoutParams.height = (vg.getWidth() - vg.getPaddingLeft() - vg.getPaddingRight()) / mSpanCount - layoutParams.leftMargin - layoutParams.rightMargin;
-        itemSelectImageBinding.cardView.setLayoutParams(layoutParams);
+        ViewHolder<ItemSelectImageBinding> viewHolder = super.onCreateViewHolder(parent, binding, viewType);
+        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) binding.cardView.getLayoutParams();
+        layoutParams.height = (parent.getWidth() - parent.getPaddingLeft() - parent.getPaddingRight()) / mSpanCount - layoutParams.leftMargin - layoutParams.rightMargin;
+        binding.cardView.setLayoutParams(layoutParams);
 
 
         //指定由哪个控件触发选中事件，默认 binding.getRoot()
-        viewHolder.setTrigger(itemSelectImageBinding.ivSelect);
+        viewHolder.setTrigger(binding.ivSelect);
         return viewHolder;
     }
 

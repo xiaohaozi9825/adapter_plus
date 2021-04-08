@@ -41,8 +41,8 @@ public abstract class SingleTypeAdapter<VDB extends ViewDataBinding, D, VH exten
         return getLayoutResource();
     }
 
-
-    protected <VG extends ViewGroup> VH onCreateViewHolder(@NonNull VG vg, VDB vdb, int viewType) {
+    @Override
+    protected <VG extends ViewGroup> VH onCreateViewHolder(@NonNull VG parent, @NonNull VDB binding, int viewType) {
         // FIXME: 2019/12/18 0018 这里使用泛型实例化ViewHolder，目前测试ok，不保证以后不会出现问题
         try {
             Type[] types = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments();
@@ -56,7 +56,7 @@ public abstract class SingleTypeAdapter<VDB extends ViewDataBinding, D, VH exten
                 String class_name = type2.toString().substring(0, type2.toString().lastIndexOf("<"));
                 constructor = Class.forName(class_name).getDeclaredConstructor(ViewDataBinding.class);
             }
-            return (VH) constructor.newInstance(vdb);
+            return (VH) constructor.newInstance(binding);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
