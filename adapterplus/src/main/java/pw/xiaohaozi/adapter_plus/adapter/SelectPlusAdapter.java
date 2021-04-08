@@ -27,7 +27,7 @@ import pw.xiaohaozi.adapter_plus.holder.SelectHolder;
  * 创建时间：2020/7/21 0021
  */
 public abstract class SelectPlusAdapter<VDB extends ViewDataBinding, D, VH extends SelectHolder<VDB>>
-        extends SelectAdapter<VDB, D, VH> {
+        extends BaseAdapter<VDB, D, VH> {
     protected List<Check> mChecks;//已选列表 2020-7-22 15:38:29
 
 
