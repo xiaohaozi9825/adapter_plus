@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableList;
@@ -309,7 +310,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      * @param data
      * @param checkIndex
      */
-    protected abstract void onBindViewHolder(@NonNull VH holder, int position, @NonNull VDB binding, @NonNull D data, int checkIndex);
+    protected abstract void onBindViewHolder(@NonNull VH holder, int position, @NonNull VDB binding, @Nullable D data, int checkIndex);
 
     @Override
     final public int getItemCount() {
