@@ -2,7 +2,9 @@ package pw.xiaohaozi.adapter_plus.adapter;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.LinkedList;
@@ -32,11 +34,12 @@ import pw.xiaohaozi.adapter_plus.listener.OnLongClickListener;
  */
 public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends ViewHolder<VDB>> extends RecyclerView.Adapter<VH> {
     private List<D> mDatas;
+    private DynamicChangeCallback<?> mDynamicChangeCallback;
     protected Context mContext;
-    private OnItemClickListener mOnItemClickListener;
-    private OnClickListener mOnClickListener;
-    private OnItemLongClickListener mOnItemLongClickListener;
-    private OnLongClickListener mOnLongClickListener;
+    private OnItemClickListener<VDB> mOnItemClickListener;
+    private OnClickListener<VDB> mOnClickListener;
+    private OnItemLongClickListener<VDB> mOnItemLongClickListener;
+    private OnLongClickListener<VDB> mOnLongClickListener;
 
     OnSelectChange<D> mOnSelectChange;
     int mMaxSelectSize = Integer.MAX_VALUE;//最多可以选中几个
@@ -164,13 +167,28 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      */
     public <L extends List<? extends D>> boolean refresh(L list) {
         if (list == null) return false;
+        if (mDatas instanceof ObservableList && mDynamicChangeCallback != null)
+            ((ObservableList) mDatas).removeOnListChangedCallback(mDynamicChangeCallback);
+
         mDatas = (List<D>) list;
         if (list instanceof ObservableList) {
-            ((ObservableList) mDatas).addOnListChangedCallback(new DynamicChangeCallback(this));
+            if (mDynamicChangeCallback == null)
+                mDynamicChangeCallback = new DynamicChangeCallback<>(this);
+            ((ObservableList) mDatas).addOnListChangedCallback(mDynamicChangeCallback);
         } else {
             notifyDataSetChanged();
         }
         return true;
+    }
+
+    /**
+     * 销毁，activity或fragment销毁时调用
+     * 1、清除对数据的监听
+     *
+     */
+    public void destroy() {
+        if (mDatas instanceof ObservableList && mDynamicChangeCallback != null)
+            ((ObservableList) mDatas).removeOnListChangedCallback(mDynamicChangeCallback);
     }
 
     /**
@@ -327,9 +345,9 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
     final private class DynamicChangeCallback<T extends BaseAdapter> extends
             ObservableList.OnListChangedCallback<ObservableList<T>> {
 
-        private RecyclerView.Adapter adapter;
+        private RecyclerView.Adapter<VH> adapter;
 
-        public DynamicChangeCallback(RecyclerView.Adapter adapter) {
+        public DynamicChangeCallback(RecyclerView.Adapter<VH> adapter) {
             this.adapter = adapter;
         }
 
