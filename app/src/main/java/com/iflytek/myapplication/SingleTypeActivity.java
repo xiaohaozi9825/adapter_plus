@@ -5,16 +5,22 @@ import android.widget.Toast;
 
 import com.iflytek.myapplication.adapter.MySingelTypeAdapter;
 import com.iflytek.myapplication.bean.FriendInfo;
+import com.iflytek.myapplication.databinding.ItemFriendBinding;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.ObservableArrayList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import pw.xiaohaozi.adapter_plus.adapter.MiniAdapter;
+import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
 
 
 public class SingleTypeActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private MySingelTypeAdapter mSingelTypeAdapter;
+    private MiniAdapter<ItemFriendBinding, FriendInfo> mMiniAdapter = new MiniAdapter<>((binding, data, checkIndex) -> binding.setFriendInfo(data));
     private ObservableArrayList<FriendInfo> mFriendInfos;
 
 
@@ -31,25 +37,25 @@ public class SingleTypeActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(
                 this, RecyclerView.VERTICAL, false));
 
-    mSingelTypeAdapter = new MySingelTypeAdapter();
-    mSingelTypeAdapter.setOnItemClickListener((v,binding,position) ->
-            Toast.makeText(this, "您点击了：" + binding.getFriendInfo().getName(),
-                    Toast.LENGTH_SHORT).show()
-    );
-    mSingelTypeAdapter.setOnItemLongClickListener((v,itemFriendBinding,position)  -> {
-        Toast.makeText(this, "您长按了：" + itemFriendBinding.getFriendInfo().getName(),
-                Toast.LENGTH_SHORT).show();
-    });
-    mSingelTypeAdapter.setOnClickListener((view, itemFriendBinding, layoutPosition) ->
-            Toast.makeText(this, "您点击了：" + itemFriendBinding.getFriendInfo().getName()
-                    + "的头像", Toast.LENGTH_SHORT).show()
-    );
-    mSingelTypeAdapter.setOnLongClickListener((view, itemFriendBinding, layoutPosition) ->
-            Toast.makeText(this, "您长按了：" + itemFriendBinding.getFriendInfo().getName()
-                    + "的头像", Toast.LENGTH_SHORT).show()
-    );
+        mSingelTypeAdapter = new MySingelTypeAdapter();
+        mSingelTypeAdapter.setOnItemClickListener((v, binding, position) ->
+                Toast.makeText(this, "您点击了：" + binding.getFriendInfo().getName(),
+                        Toast.LENGTH_SHORT).show()
+        );
+        mSingelTypeAdapter.setOnItemLongClickListener((v, itemFriendBinding, position) -> {
+            Toast.makeText(this, "您长按了：" + itemFriendBinding.getFriendInfo().getName(),
+                    Toast.LENGTH_SHORT).show();
+        });
+        mSingelTypeAdapter.setOnClickListener((view, itemFriendBinding, layoutPosition) ->
+                Toast.makeText(this, "您点击了：" + itemFriendBinding.getFriendInfo().getName()
+                        + "的头像", Toast.LENGTH_SHORT).show()
+        );
+        mSingelTypeAdapter.setOnLongClickListener((view, itemFriendBinding, layoutPosition) ->
+                Toast.makeText(this, "您长按了：" + itemFriendBinding.getFriendInfo().getName()
+                        + "的头像", Toast.LENGTH_SHORT).show()
+        );
 
-    mRecyclerView.setAdapter(mSingelTypeAdapter);
+        mRecyclerView.setAdapter(mSingelTypeAdapter);
     }
 
     private void initData() {
@@ -62,8 +68,8 @@ public class SingleTypeActivity extends AppCompatActivity {
         mFriendInfos.add(new FriendInfo("李宇春", "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576323118985&di=525535d0dbcf5ca0cfc6030ec477a1a5&imgtype=0&src=http%3A%2F%2Ft-1.tuzhan.com%2F1c4ffe967c62%2Fc-1%2Fl%2F2012%2F10%2F08%2F17%2F66c40456e9474af9b5b6a1747eca02b1.jpg", "麻烦不要叫我春哥"));
 
 
-    mSingelTypeAdapter.refresh(mFriendInfos);
-    mSingelTypeAdapter.add(mFriendInfos);
+        mSingelTypeAdapter.refresh(mFriendInfos);
+        mSingelTypeAdapter.add(mFriendInfos);
         mSingelTypeAdapter.add(mFriendInfos);
     }
 
