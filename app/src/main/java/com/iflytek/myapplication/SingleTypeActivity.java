@@ -13,14 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.ObservableArrayList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import pw.xiaohaozi.adapter_plus.adapter.MiniAdapter;
-import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
 
 
 public class SingleTypeActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private MySingelTypeAdapter mSingelTypeAdapter;
-    private MiniAdapter<ItemFriendBinding, FriendInfo> mMiniAdapter = new MiniAdapter<>((binding, data, checkIndex) -> binding.setFriendInfo(data));
     private ObservableArrayList<FriendInfo> mFriendInfos;
 
 

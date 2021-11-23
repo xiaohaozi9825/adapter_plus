@@ -2,9 +2,7 @@ package pw.xiaohaozi.adapter_plus.adapter;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.LinkedList;
@@ -12,6 +10,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.util.Consumer;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableList;
@@ -19,10 +18,10 @@ import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 import pw.xiaohaozi.adapter_plus.data.Check;
 import pw.xiaohaozi.adapter_plus.data.ViewTyper;
-import pw.xiaohaozi.adapter_plus.listener.OnItemLongClickListener;
+import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
 import pw.xiaohaozi.adapter_plus.listener.OnClickListener;
 import pw.xiaohaozi.adapter_plus.listener.OnItemClickListener;
-import pw.xiaohaozi.adapter_plus.holder.ViewHolder;
+import pw.xiaohaozi.adapter_plus.listener.OnItemLongClickListener;
 import pw.xiaohaozi.adapter_plus.listener.OnLongClickListener;
 
 /**
@@ -184,7 +183,6 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
     /**
      * 销毁，activity或fragment销毁时调用
      * 1、清除对数据的监听
-     *
      */
     public void destroy() {
         if (mDatas instanceof ObservableList && mDynamicChangeCallback != null)
@@ -468,14 +466,48 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
     public void addSelectItem(D d) {
         if (d == null) return;
         if (!(d instanceof Check)) return;
-        Check sd = (Check) d;
-        if (sd.checkIndex() >= 0) return;//如果已经是选中状态，不操作
-        sd.checkIndex(mChecks.size());
-        mChecks.add(sd);
-        if (getDatas() != null && getDatas().contains(d)) {
-            int position = getDatas().indexOf(d);
+        Check check = (Check) d;
+        if (check.checkIndex() >= 0) return;//如果已经是选中状态，不操作
+        if (mMaxSelectSize <= mChecks.size()) {
+            if (isAutoRemove) {
+                mChecks.add(check);//添加到数组中
+                //判断是否超过最大选择数
+                if (mChecks.size() > mMaxSelectSize) {//如果超过
+                    Check remove = mChecks.remove(0);//① 删除最前面添加的item
+                    remove.checkIndex(-1);//②将删除后的item设为未选择状态
+                    notify(remove, it -> onSelectChange(it, false));//③刷新item
+                    //遍历所有选中的item，修改索引，并刷新
+                    for (int i = 0; i < mChecks.size(); i++) {
+                        Check check1 = mChecks.get(i);
+                        check1.checkIndex(i);
+                        notify(check1, it ->
+                                {
+                                    if (check == check1) onSelectChange(it, true);
+                                }
+                        );
+                    }
+                } else {//如果没有超过最大选择数，则只刷新最后添加进来的item
+                    check.checkIndex(mChecks.size());//设置选中索引
+                    notify(check, it -> onSelectChange(it, true)
+                    );
+                }
+            } else {
+                if (mAutoRemoveWarning != null)
+                    mAutoRemoveWarning.warn("您最多只能选中" + mMaxSelectSize + "条");
+            }
+        }else {
+            if (mAutoRemoveWarning != null)
+                mAutoRemoveWarning.warn("您最多只能选中" + mMaxSelectSize + "条");
+        }
+
+
+    }
+
+    private void notify(Check check, Consumer<Integer> consumer) {
+        if (getDatas() != null && getDatas().contains(check)) {
+            int position = getDatas().indexOf(check);
             notifyItemChanged(position);
-            onSelectChange(position, true);
+            consumer.accept(position);
         }
     }
 

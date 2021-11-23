@@ -51,14 +51,16 @@ public class SelectPlusActivity extends AppCompatActivity {
         });
         //反选
         mBtnSelectInvert.setOnClickListener(v -> {
-            mImageSelectAdapter.invertSelect();
+//            mImageSelectAdapter.invertSelect();
+            mImageSelectAdapter.addSelectItem(mImageSelectAdapter.getDatas().get(0));
         });
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 4, RecyclerView.VERTICAL, false));
         mRecyclerView.post(() -> {
             mImageSelectAdapter = new ImageSelectPlusAdapter();
-            mImageSelectAdapter.setMaxSelectSize(1);
-            mImageSelectAdapter.setNoCancel(false);
+            mImageSelectAdapter.setMaxSelectSize(4);
+            mImageSelectAdapter.setNoCancel(true);
+            mImageSelectAdapter.setAutoRemove(false, msg -> Toast.makeText(this,msg,Toast.LENGTH_SHORT).show());
             mImageSelectAdapter.setOnItemClickListener((v, itemSelectImageBinding, position) -> {
                 Toast.makeText(getApplicationContext(), "点击查看大图", Toast.LENGTH_SHORT).show();
             });
