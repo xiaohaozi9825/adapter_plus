@@ -468,39 +468,34 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         if (!(d instanceof Check)) return;
         Check check = (Check) d;
         if (check.checkIndex() >= 0) return;//如果已经是选中状态，不操作
-        if (mMaxSelectSize <= mChecks.size()) {
-            if (isAutoRemove) {
-                mChecks.add(check);//添加到数组中
-                //判断是否超过最大选择数
-                if (mChecks.size() > mMaxSelectSize) {//如果超过
-                    Check remove = mChecks.remove(0);//① 删除最前面添加的item
-                    remove.checkIndex(-1);//②将删除后的item设为未选择状态
-                    notify(remove, it -> onSelectChange(it, false));//③刷新item
-                    //遍历所有选中的item，修改索引，并刷新
-                    for (int i = 0; i < mChecks.size(); i++) {
-                        Check check1 = mChecks.get(i);
-                        check1.checkIndex(i);
-                        notify(check1, it ->
-                                {
-                                    if (check == check1) onSelectChange(it, true);
-                                }
-                        );
-                    }
-                } else {//如果没有超过最大选择数，则只刷新最后添加进来的item
-                    check.checkIndex(mChecks.size());//设置选中索引
-                    notify(check, it -> onSelectChange(it, true)
-                    );
-                }
-            } else {
+        if (mChecks.size() >= mMaxSelectSize) {//如果已经到达最大个数了
+            if (!isAutoRemove) {
                 if (mAutoRemoveWarning != null)
                     mAutoRemoveWarning.warn("您最多只能选中" + mMaxSelectSize + "条");
+                return;
             }
-        }else {
-            if (mAutoRemoveWarning != null)
-                mAutoRemoveWarning.warn("您最多只能选中" + mMaxSelectSize + "条");
         }
-
-
+        mChecks.add(check);//添加到数组中
+        //判断是否超过最大选择数
+        if (mChecks.size() > mMaxSelectSize) {//如果超过
+            Check remove = mChecks.remove(0);//① 删除最前面添加的item
+            remove.checkIndex(-1);//②将删除后的item设为未选择状态
+            notify(remove, it -> onSelectChange(it, false));//③刷新item
+            //遍历所有选中的item，修改索引，并刷新
+            for (int i = 0; i < mChecks.size(); i++) {
+                Check check1 = mChecks.get(i);
+                check1.checkIndex(i);
+                notify(check1, it ->
+                        {
+                            if (check == check1) onSelectChange(it, true);
+                        }
+                );
+            }
+        } else {//如果没有超过最大选择数，则只刷新最后添加进来的item
+            check.checkIndex(mChecks.size()-1);//设置选中索引
+            notify(check, it -> onSelectChange(it, true)
+            );
+        }
     }
 
     private void notify(Check check, Consumer<Integer> consumer) {

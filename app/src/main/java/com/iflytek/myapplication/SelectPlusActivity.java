@@ -58,9 +58,9 @@ public class SelectPlusActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 4, RecyclerView.VERTICAL, false));
         mRecyclerView.post(() -> {
             mImageSelectAdapter = new ImageSelectPlusAdapter();
-            mImageSelectAdapter.setMaxSelectSize(4);
+            mImageSelectAdapter.setMaxSelectSize(1);
             mImageSelectAdapter.setNoCancel(true);
-            mImageSelectAdapter.setAutoRemove(false, msg -> Toast.makeText(this,msg,Toast.LENGTH_SHORT).show());
+//            mImageSelectAdapter.setAutoRemove(false, msg -> Toast.makeText(this,msg,Toast.LENGTH_SHORT).show());
             mImageSelectAdapter.setOnItemClickListener((v, itemSelectImageBinding, position) -> {
                 Toast.makeText(getApplicationContext(), "点击查看大图", Toast.LENGTH_SHORT).show();
             });
