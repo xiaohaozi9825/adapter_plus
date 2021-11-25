@@ -92,6 +92,18 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
     }
 
     /**
+     * 更新所有item
+     * 使用notifyDataSetChanged()方法刷新列表，会将所有数据重新绑定一次，这样会出现闪烁。
+     * 如果不需要重新绑定数据，可以使用该方法，但是可能存在性能问题
+     */
+    final public void notifyAllItemChanged() {
+        int size = mDatas.size();
+        for (int i = 0; i < size - 1; i++) {
+            notifyItemChanged(i);
+        }
+    }
+
+    /**
      * 增加一条数据到指定位置
      * <p>
      * 弃用原因：如果数据 D 继承了BaseObservable,则可以实时更新数据了，无需调用该方法
@@ -245,9 +257,9 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
                 check.checkIndex(-1);
 
                 notifyItemChanged(position);
-                refreshCheckIndex();
+//                refreshCheckIndex();
 
-                onSelectChange(position, false);
+                onSelectChange(position, false,true);
                 return;
             }
             //如果选择个数最大可选个数，则移除选中的第一个
@@ -255,11 +267,11 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
                 if (isAutoRemove) {
                     Check first = mChecks.remove(0);
                     first.checkIndex(-1);
-                    refreshCheckIndex();
+//                    refreshCheckIndex();
 
                     int indexOf = getDatas().indexOf(first);
                     notifyItemChanged(indexOf);
-                    onSelectChange(indexOf, false);
+                    onSelectChange(indexOf, false,false);
                 } else {
                     if (mAutoRemoveWarning != null)
                         mAutoRemoveWarning.warn("您最多只能选中" + mMaxSelectSize + "条");
@@ -269,7 +281,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
             check.checkIndex(mChecks.size());
             mChecks.add(check);
             notifyItemChanged(position);
-            onSelectChange(position, true);
+            onSelectChange(position, true,true);
         });
 
         return vh;
@@ -445,8 +457,15 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
          * @param position 发生改变的索引
          * @param isSelect 改变后的状态
          * @param d        被改变的数据
+         * @param isClick   该状态的改变是否是由于点击事件触发的
+         *                  1. 点击触发 true
+         *                  2. 被选中数>最大可选择数时，被自动取消选中 false
+         *                  3. 调用addSelect()方法 false
+         *                  4. 调用selectAll()方法 false
+         *                  5. 调用cancelAll()方法 false
+         *
          */
-        void onSelectChange(int position, boolean isSelect, D d);
+        void onSelectChange(int position, boolean isSelect, D d,boolean isClick);
 
         /**
          * 是否全选，全选和反选，还有全不选调用
@@ -480,20 +499,20 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         if (mChecks.size() > mMaxSelectSize) {//如果超过
             Check remove = mChecks.remove(0);//① 删除最前面添加的item
             remove.checkIndex(-1);//②将删除后的item设为未选择状态
-            notify(remove, it -> onSelectChange(it, false));//③刷新item
+            notify(remove, it -> onSelectChange(it, false,false));//③刷新item
             //遍历所有选中的item，修改索引，并刷新
             for (int i = 0; i < mChecks.size(); i++) {
                 Check check1 = mChecks.get(i);
                 check1.checkIndex(i);
                 notify(check1, it ->
                         {
-                            if (check == check1) onSelectChange(it, true);
+                            if (check == check1) onSelectChange(it, true,false);
                         }
                 );
             }
         } else {//如果没有超过最大选择数，则只刷新最后添加进来的item
-            check.checkIndex(mChecks.size()-1);//设置选中索引
-            notify(check, it -> onSelectChange(it, true)
+            check.checkIndex(mChecks.size() - 1);//设置选中索引
+            notify(check, it -> onSelectChange(it, true,false)
             );
         }
     }
@@ -520,11 +539,11 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         if (sd.checkIndex() < 0) return;//如果已经是未选中状态，不操作
         mChecks.remove(sd);
         sd.checkIndex(-1);
-        refreshCheckIndex();
+//        refreshCheckIndex();
         if (getDatas() != null && getDatas().contains(d)) {
             int position = getDatas().indexOf(d);
             notifyItemChanged(position);
-            onSelectChange(position, false);
+            onSelectChange(position, false,false);
         }
     }
 
@@ -554,10 +573,12 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
                 mChecks.add(sd);
             } else {
                 sd.checkIndex(-1);
-                refreshCheckIndex();
+//                refreshCheckIndex();
             }
+            notifyItemChanged(i);
+            if (mOnSelectChange != null)
+                mOnSelectChange.onSelectChange(i, true,d,false);
         }
-        notifyDataSetChanged();
         if (mOnSelectChange != null) mOnSelectChange.onSelectAll(true);
 
     }
@@ -568,15 +589,17 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      * @return
      */
     public void cancelAll() {
-
-        for (Check d : mChecks) {
+        for (int i = 0; i < getDatas().size(); i++) {
+            D d = getDatas().get(i);
             if (d == null) continue;
-            d.checkIndex(-1);
+            Check check = (Check) d;
+            check.checkIndex(-1);
+            notifyItemChanged(i);
+            if (mOnSelectChange != null)
+                mOnSelectChange.onSelectChange(i, false, d,false);
         }
         mChecks.clear();
-        notifyDataSetChanged();
         if (mOnSelectChange != null) mOnSelectChange.onSelectAll(false);
-
     }
 
     /**
@@ -603,12 +626,13 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
             } else {
                 sd.checkIndex(-1);
             }
+            notifyItemChanged(i);
+            if (mOnSelectChange != null)
+                mOnSelectChange.onSelectChange(i, sd.checkIndex()>=0, d,false);
         }
-        refreshCheckIndex();
+//        refreshCheckIndex();
         if (mOnSelectChange != null)
             mOnSelectChange.onSelectAll(mChecks.size() == getDatas().size());
-
-        notifyDataSetChanged();
     }
 
     /**
@@ -630,11 +654,14 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      *
      * @param position 被改变的索引
      * @param isSelect 是否被选中
+     * @param isClick   是否是被点击事件触发的状态改变
      */
-    protected void onSelectChange(int position, boolean isSelect) {
+    protected void onSelectChange(int position, boolean isSelect,boolean isClick) {
         if (mOnSelectChange != null) {
-            mOnSelectChange.onSelectChange(position, isSelect, getDatas().get(position));
+            mOnSelectChange.onSelectChange(position, isSelect, getDatas().get(position),isClick);
             mOnSelectChange.onSelectAll(mChecks.size() == getDatas().size());
         }
     }
+
+
 }

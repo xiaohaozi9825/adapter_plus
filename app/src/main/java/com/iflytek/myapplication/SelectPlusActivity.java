@@ -51,14 +51,14 @@ public class SelectPlusActivity extends AppCompatActivity {
         });
         //反选
         mBtnSelectInvert.setOnClickListener(v -> {
-//            mImageSelectAdapter.invertSelect();
-            mImageSelectAdapter.addSelectItem(mImageSelectAdapter.getDatas().get(0));
+            mImageSelectAdapter.invertSelect();
+//            mImageSelectAdapter.addSelectItem(mImageSelectAdapter.getDatas().get(0));
         });
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 4, RecyclerView.VERTICAL, false));
         mRecyclerView.post(() -> {
             mImageSelectAdapter = new ImageSelectPlusAdapter();
-            mImageSelectAdapter.setMaxSelectSize(1);
+//            mImageSelectAdapter.setMaxSelectSize(1);
             mImageSelectAdapter.setNoCancel(true);
 //            mImageSelectAdapter.setAutoRemove(false, msg -> Toast.makeText(this,msg,Toast.LENGTH_SHORT).show());
             mImageSelectAdapter.setOnItemClickListener((v, itemSelectImageBinding, position) -> {
@@ -66,11 +66,11 @@ public class SelectPlusActivity extends AppCompatActivity {
             });
             mImageSelectAdapter.setOnSelectChange(new BaseAdapter.OnSelectChange<ImageUrlInfo>() {
                 @Override
-                public void onSelectChange(int position, boolean isSelect, ImageUrlInfo imageUrlInfo) {
+                public void onSelectChange(int position, boolean isSelect, ImageUrlInfo imageUrlInfo,boolean isClick) {
                     if (isSelect) {
-                        Log.i("选择", "onSelectChange: +++ " + position);
+                        Log.i("选择", isClick+"  onSelectChange: +++ " + position);
                     } else {
-                        Log.i("选择", "onSelectChange: --- " + position);
+                        Log.i("选择", isClick+"  onSelectChange: --- " + position);
                     }
                 }
 
