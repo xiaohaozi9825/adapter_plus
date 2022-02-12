@@ -1,7 +1,6 @@
 package com.iflytek.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.ObservableArrayList;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import pw.xiaohaozi.adapter_plus.adapter.BaseAdapter;
@@ -16,10 +15,12 @@ import android.widget.Toast;
 import com.iflytek.myapplication.adapter.ImageSelectPlusAdapter;
 import com.iflytek.myapplication.bean.ImageUrlInfo;
 
+import java.util.ArrayList;
+
 public class SelectPlusActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ImageSelectPlusAdapter mImageSelectAdapter;
-    private ObservableArrayList<ImageUrlInfo> mObservableArrayList;
+    private ArrayList<ImageUrlInfo> mObservableArrayList;
     private Button mBtnSelectAll;
     private Button mBtnSelectAuto;
     private Button mBtnSelectInvert;
@@ -45,32 +46,37 @@ public class SelectPlusActivity extends AppCompatActivity {
         });
         //多余的是否自动取消
         mBtnSelectAuto.setOnClickListener(v -> {
-            mImageSelectAdapter.setAutoRemove(true, msg -> {
-                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-            });
+//            mImageSelectAdapter.setAutoRemove(true, msg -> {
+//                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+//            });
+            mImageSelectAdapter.cancelSelectItem(mImageSelectAdapter.getDatas().get(1));
         });
         //反选
         mBtnSelectInvert.setOnClickListener(v -> {
-            mImageSelectAdapter.invertSelect();
+//            mImageSelectAdapter.invertSelect();
 //            mImageSelectAdapter.addSelectItem(mImageSelectAdapter.getDatas().get(0));
+            ArrayList<ImageUrlInfo> remove = new ArrayList<>();
+            remove.add(mObservableArrayList.get(0));
+            remove.add(mObservableArrayList.get(2));
+            mImageSelectAdapter.remove(remove);
         });
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 4, RecyclerView.VERTICAL, false));
         mRecyclerView.post(() -> {
             mImageSelectAdapter = new ImageSelectPlusAdapter();
-//            mImageSelectAdapter.setMaxSelectSize(1);
-            mImageSelectAdapter.setNoCancel(true);
+//            mImageSelectAdapter.setMaxSelectSize(3);
+//            mImageSelectAdapter.setNoCancel(true);
 //            mImageSelectAdapter.setAutoRemove(false, msg -> Toast.makeText(this,msg,Toast.LENGTH_SHORT).show());
             mImageSelectAdapter.setOnItemClickListener((v, itemSelectImageBinding, position) -> {
                 Toast.makeText(getApplicationContext(), "点击查看大图", Toast.LENGTH_SHORT).show();
             });
             mImageSelectAdapter.setOnSelectChange(new BaseAdapter.OnSelectChange<ImageUrlInfo>() {
                 @Override
-                public void onSelectChange(int position, boolean isSelect, ImageUrlInfo imageUrlInfo,boolean isClick) {
+                public void onSelectChange(int position, boolean isSelect, ImageUrlInfo imageUrlInfo, boolean isClick) {
                     if (isSelect) {
-                        Log.i("选择", isClick+"  onSelectChange: +++ " + position);
+                        Log.i("选择", isClick + "  onSelectChange: +++ " + position);
                     } else {
-                        Log.i("选择", isClick+"  onSelectChange: --- " + position);
+                        Log.i("选择", isClick + "  onSelectChange: --- " + position);
                     }
                 }
 
@@ -95,7 +101,7 @@ public class SelectPlusActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        mObservableArrayList = new ObservableArrayList<>();
+        mObservableArrayList = new ArrayList<>();
         mObservableArrayList.add(new ImageUrlInfo("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576754910095&di=337892aa5be671ab368ee12e7bbd5251&imgtype=0&src=http%3A%2F%2Fhiphotos.baidu.com%2Fimage%2F%2577%3D%2536%2534%2530%3B%2563%2572%256F%2570%3D%2530%2C%2534%2536%2C%2536%2534%2530%2C%2533%2535%2535%2Fsign%3Df4ce751aa3014c08193b2ba13a40617a%2Fa50f4bfbfbedab641ea5b573fd36afc378311ea9.jpg"));
         mObservableArrayList.add(new ImageUrlInfo("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576754910095&di=5435efceba93fe334b4afea38f7beafc&imgtype=0&src=http%3A%2F%2Fpicture.ik123.com%2Fuploads%2Fallimg%2F180207%2F4-1P20G44617.jpg"));
         mObservableArrayList.add(new ImageUrlInfo("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576754910093&di=adf32f27116ade47b5952fce76f91e02&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fblog%2F201407%2F16%2F20140716155024_MJvEQ.thumb.700_0.jpeg"));

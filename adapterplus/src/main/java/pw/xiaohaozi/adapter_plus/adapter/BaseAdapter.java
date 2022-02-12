@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -134,9 +135,14 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
     @Deprecated
     public boolean remove(int position) {
         if (mDatas == null) return false;
-        D d = mDatas.remove(position);
+        D data = mDatas.remove(position);
         if (!(mDatas instanceof ObservableList)) notifyItemRemoved(position);
-        return d != null;
+        if (data instanceof Check) {
+            int checkIndex = mChecks.indexOf(data);
+            mChecks.remove(data);
+            refreshCheckIndex(checkIndex);
+        }
+        return data != null;
     }
 
     /**
@@ -152,8 +158,14 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         if (data == null) return false;
         int indexOf = mDatas.indexOf(data);
         if (indexOf >= 0) {
+            boolean remove = mDatas.remove(data);
             if (!(mDatas instanceof ObservableList)) notifyItemRemoved(indexOf);
-            return mDatas.remove(data);
+            if (data instanceof Check) {
+                int checkIndex = mChecks.indexOf(data);
+                mChecks.remove(data);
+                refreshCheckIndex(checkIndex);
+            }
+            return remove;
         }
         return false;
     }
@@ -167,8 +179,35 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
     public boolean remove() {
         if (mDatas == null) return false;
         mDatas.clear();
+        mChecks.clear();
         if (!(mDatas instanceof ObservableList)) notifyDataSetChanged();
         return true;
+    }
+
+    /**
+     * 移除所有数据
+     * <p>
+     * 弃用原因：如果数据 D 继承了BaseObservable,则可以实时更新数据了，无需调用该方法
+     */
+    @Deprecated
+    public <L extends List<? extends D>> boolean remove(L list) {
+        if (mDatas == null) return false;
+        if (list == null) return false;
+        ArrayList<Integer> indexList = new ArrayList<>();
+        int checkIndex = Integer.MAX_VALUE;
+        for (D d : list) {
+            indexList.add(mDatas.indexOf(d));
+            if (d instanceof Check) checkIndex = Math.min(checkIndex, mChecks.indexOf(d));
+        }
+        boolean remove = mDatas.removeAll(list);
+
+        mChecks.removeAll(list);
+        int index = 0;
+        for (Check check : mChecks) {
+            check.checkIndex(index++);
+        }
+        notifyDataSetChanged();
+        return remove;
     }
 
     /**
@@ -178,6 +217,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
      */
     public <L extends List<? extends D>> boolean refresh(L list) {
         if (list == null) return false;
+        mChecks.clear();
         if (mDatas instanceof ObservableList && mDynamicChangeCallback != null)
             ((ObservableList) mDatas).removeOnListChangedCallback(mDynamicChangeCallback);
 
@@ -252,13 +292,14 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
             if (!(d instanceof Check)) return;
             Check check = (Check) d;
             //先判断该item是否已经被选中了，如果是，则取消选择
-            if (check.checkIndex() >= 0) {
+            int checkIndex = check.checkIndex();
+            if (checkIndex >= 0) {
                 if (isNoCancel) return;//如果禁止取消，则不执行任何操作
                 mChecks.remove(check);
                 check.checkIndex(-1);
 
                 notifyItemChanged(position);
-//                refreshCheckIndex();
+                refreshCheckIndex(checkIndex);
 
                 onSelectChange(position, false, true);
                 return;
@@ -268,10 +309,11 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
                 if (isAutoRemove) {
                     Check first = mChecks.remove(0);
                     first.checkIndex(-1);
-//                    refreshCheckIndex();
 
                     int indexOf = getDatas().indexOf(first);
                     notifyItemChanged(indexOf);
+
+                    refreshCheckIndex(0);
                     onSelectChange(indexOf, false, false);
                 } else {
                     if (mAutoRemoveWarning != null)
@@ -535,24 +577,26 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
     public void cancelSelectItem(D d) {
         if (d == null) return;
         if (!(d instanceof Check)) return;
-        Check sd = (Check) d;
-        if (sd.checkIndex() < 0) return;//如果已经是未选中状态，不操作
-        mChecks.remove(sd);
-        sd.checkIndex(-1);
-//        refreshCheckIndex();
-        if (getDatas() != null && getDatas().contains(d)) {
+        Check check = (Check) d;
+        int checkIndex = check.checkIndex();
+        if (checkIndex < 0) return;//如果已经是未选中状态，不操作
+        mChecks.remove(check);
+        check.checkIndex(-1);
+        if (mDatas == null) return;
+        refreshCheckIndex(checkIndex);
+        if (mDatas.contains(d)) {
             int position = getDatas().indexOf(d);
             notifyItemChanged(position);
             onSelectChange(position, false, false);
         }
     }
 
-    private void refreshCheckIndex() {
+    private void refreshCheckIndex(int startIndex) {
         int index = 0;
         for (Check check : mChecks) {
             check.checkIndex(index++);
-            int indexOf = getDatas().indexOf(check);
-            if (indexOf >= 0) notifyItemChanged(indexOf);
+            int indexOf = mDatas.indexOf(check);
+            if (indexOf >= 0 && index > startIndex) notifyItemChanged(indexOf);
         }
     }
 

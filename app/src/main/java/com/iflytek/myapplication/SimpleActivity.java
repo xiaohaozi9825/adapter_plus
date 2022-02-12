@@ -15,6 +15,8 @@ import com.iflytek.myapplication.adapter.FriendAdapter;
 import com.iflytek.myapplication.bean.FriendInfo;
 import com.iflytek.myapplication.databinding.ItemFriendBinding;
 
+import java.util.ArrayList;
+
 public class SimpleActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private FriendAdapter mFriendAdapter;
@@ -37,9 +39,10 @@ public class SimpleActivity extends AppCompatActivity {
                 this, RecyclerView.VERTICAL, false));
 
         mFriendAdapter = new FriendAdapter();
-        mFriendAdapter.setOnItemClickListener((v, itemFriendBinding, position) ->
-                Toast.makeText(this, "您点击了：" + itemFriendBinding.getFriendInfo().getName(),
-                        Toast.LENGTH_SHORT).show()
+        mFriendAdapter.setOnItemClickListener((v, itemFriendBinding, position) -> {
+                    Toast.makeText(this, "您点击了：" + itemFriendBinding.getFriendInfo().getName(),
+                            Toast.LENGTH_SHORT).show();
+                       }
         );
         mFriendAdapter.setOnItemLongClickListener((v, itemFriendBinding, position) ->
                 Toast.makeText(this, "您长按了：" + itemFriendBinding.getFriendInfo().getName(),
@@ -62,7 +65,7 @@ public class SimpleActivity extends AppCompatActivity {
         mFriendInfos.add(new FriendInfo("王健林", "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576322891556&di=662826fbc3a87917c769246e25fc2711&imgtype=0&src=http%3A%2F%2Fimage.thepaper.cn%2Fwap%2Fimage%2F4%2F375%2F847.jpg", "但是最好先定一个能达到的小目标。比如我先挣它一个亿。"));
         mFriendInfos.add(new FriendInfo("马云", "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576322838876&di=4352cdbb664326b23ec43d538e019a79&imgtype=0&src=http%3A%2F%2Ffile.qiyejia.info%2Fspider%2F2017%2F01%2F07%2F2017010710145432995.jpg", "我对钱没兴趣"));
 
-//        mFriendAdapter.refresh(mFriendInfos);
+        mFriendAdapter.refresh(mFriendInfos);
 //        mFriendAdapter.add(mFriendInfos);
 //        mFriendAdapter.add(mFriendInfos);
 
