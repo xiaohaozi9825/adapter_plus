@@ -311,6 +311,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
                     first.checkIndex(-1);
 
                     int indexOf = getDatas().indexOf(first);
+                    if (indexOf < 0 || indexOf >= mDatas.size()) return;
                     notifyItemChanged(indexOf);
 
                     refreshCheckIndex(0);
@@ -561,7 +562,8 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
 
     private void notify(Check check, Consumer<Integer> consumer) {
         if (getDatas() != null && getDatas().contains(check)) {
-            int position = getDatas().indexOf(check);
+            int position = mDatas.indexOf(check);
+            if (position < 0 || position >= mDatas.size()) return;
             notifyItemChanged(position);
             consumer.accept(position);
         }
@@ -586,6 +588,7 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         refreshCheckIndex(checkIndex);
         if (mDatas.contains(d)) {
             int position = getDatas().indexOf(d);
+            if (position < 0 || position >= mDatas.size()) return;
             notifyItemChanged(position);
             onSelectChange(position, false, false);
         }
