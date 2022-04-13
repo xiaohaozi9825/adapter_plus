@@ -64,6 +64,17 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         }
     }
 
+    @Deprecated
+    public boolean add(int position, List<? extends D> list) {
+        if (mDatas == null) {
+            return refresh(list);
+        } else {
+            if (position > mDatas.size()) return mDatas.addAll(list);
+            else if (position < 0) return mDatas.addAll(0, list);
+            else return mDatas.addAll(position, list);
+        }
+    }
+
     /**
      * 增加一个数据
      * <p>
