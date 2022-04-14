@@ -49,33 +49,6 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
     protected List<Check> mChecks = new LinkedList<>();//已选列表 2020-7-22 15:38:29
 
     /**
-     * 追加数据，可用于上拉加载更多
-     * <p>
-     * 弃用原因：如果数据 D 继承了BaseObservable,则可以实时更新数据了，无需调用该方法
-     *
-     * @param list
-     */
-    @Deprecated
-    public boolean add(List<? extends D> list) {
-        if (mDatas == null) {
-            return refresh(list);
-        } else {
-            return mDatas.addAll(list);
-        }
-    }
-
-    @Deprecated
-    public boolean add(int position, List<? extends D> list) {
-        if (mDatas == null) {
-            return refresh(list);
-        } else {
-            if (position > mDatas.size()) return mDatas.addAll(list);
-            else if (position < 0) return mDatas.addAll(0, list);
-            else return mDatas.addAll(position, list);
-        }
-    }
-
-    /**
      * 增加一个数据
      * <p>
      * 弃用原因：如果数据 D 继承了BaseObservable,则可以实时更新数据了，无需调用该方法
@@ -104,18 +77,6 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
     }
 
     /**
-     * 更新所有item
-     * 使用notifyDataSetChanged()方法刷新列表，会将所有数据重新绑定一次，这样会出现闪烁。
-     * 如果不需要重新绑定数据，可以使用该方法，但是可能存在性能问题
-     */
-    final public void notifyAllItemChanged() {
-        int size = mDatas.size();
-        for (int i = 0; i < size; i++) {
-            notifyItemChanged(i);
-        }
-    }
-
-    /**
      * 增加一条数据到指定位置
      * <p>
      * 弃用原因：如果数据 D 继承了BaseObservable,则可以实时更新数据了，无需调用该方法
@@ -135,6 +96,58 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
             return true;
         }
     }
+
+    /**
+     * 追加数据，可用于上拉加载更多
+     * <p>
+     * 弃用原因：如果数据 D 继承了BaseObservable,则可以实时更新数据了，无需调用该方法
+     *
+     * @param list
+     */
+    @Deprecated
+    public <L extends List<? extends D>> boolean add(L list) {
+        if (mDatas == null) {
+            return refresh(list);
+        } else {
+            boolean b = mDatas.addAll(list);
+            notifyItemRangeInserted(mDatas.size() - list.size(), list.size());
+            return b;
+        }
+    }
+
+    @Deprecated
+    public <L extends List<? extends D>> boolean add(int position, L list) {
+        if (mDatas == null) {
+            return refresh(list);
+        } else {
+            boolean b;
+            if (position > mDatas.size()) {
+                b = mDatas.addAll(list);
+                notifyItemRangeInserted(mDatas.size() - list.size(), list.size());
+            } else if (position < 0) {
+                b = mDatas.addAll(0, list);
+                notifyItemRangeInserted(0, list.size());
+            } else {
+                b = mDatas.addAll(position, list);
+                notifyItemRangeInserted(position, list.size());
+            }
+            return b;
+        }
+    }
+
+
+    /**
+     * 更新所有item
+     * 使用notifyDataSetChanged()方法刷新列表，会将所有数据重新绑定一次，这样会出现闪烁。
+     * 如果不需要重新绑定数据，可以使用该方法，但是可能存在性能问题
+     */
+    final public void notifyAllItemChanged() {
+        int size = mDatas.size();
+        for (int i = 0; i < size; i++) {
+            notifyItemChanged(i);
+        }
+    }
+
 
     /**
      * 移除指定位置数据
@@ -240,6 +253,16 @@ public abstract class BaseAdapter<VDB extends ViewDataBinding, D, VH extends Vie
         } else {
             notifyDataSetChanged();
         }
+        return true;
+    }
+
+    public boolean remove(int start, int count) {
+        if (start < 0) return false;
+        if (count + start > mDatas.size()) return false;
+        for (int i = 0; i < count; i++) {
+            mDatas.remove(start);
+        }
+        notifyItemRangeRemoved(start, count);
         return true;
     }
 
